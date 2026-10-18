@@ -101,6 +101,30 @@ class KnowledgeClient:
                                            "requester": self.requester})
         return int(data["id"])
 
+    def _get(self, path: str, params: dict | None = None) -> dict | list:
+        try:
+            r = self.http.get(path, params=params)
+            r.raise_for_status()
+            return r.json()
+        except httpx.HTTPError as exc:
+            raise KnowledgeUnavailable(f"Knowledge Brain request to {path} failed: {exc}") from exc
+
+    def list_escalations(self, status: str | None = None) -> list[dict]:
+        return self._get("/escalations", {"status": status} if status else None)  # type: ignore[return-value]
+
+    def resolve_escalation(self, escalation_id: int, answer: str, expert: str, scope: str = "general",
+                           source_url: str | None = None, expires_at: str | None = None) -> dict:
+        return self._post(f"/escalations/{escalation_id}/resolve",
+                          {"answer": answer, "expert": expert, "scope": scope, "source_url": source_url,
+                           "expires_at": expires_at})
+
+    def ingestion_status(self) -> dict:
+        return self._get("/ingestion/status")  # type: ignore[return-value]
+
+    def run_ingestion(self, mode: str = "incremental", limit: int | None = None,
+                      describe_images: bool = True) -> dict:
+        return self._post("/ingestion/run", {"mode": mode, "limit": limit, "describe_images": describe_images})
+
     def health(self) -> dict:
         try:
             r = self.http.get("/health", timeout=5)
