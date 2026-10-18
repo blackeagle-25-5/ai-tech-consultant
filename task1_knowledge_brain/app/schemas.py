@@ -38,6 +38,8 @@ class QueryResponse(BaseModel):
     escalation_id: int | None = None
     model: str | None = None
     prompt_version: str | None = None
+    safety_notes: list[str] = Field(default_factory=list,
+        description="Why an answer was declined or downgraded by the deterministic safety checks.")
     latency_ms: int
     cost_usd: float
 

@@ -1,0 +1,72 @@
+{
+  "groq:openai/gpt-oss-20b": {
+    "cases": 32,
+    "pass_rate": 0.719,
+    "mean_quality": 0.812,
+    "p50_latency_ms": 15813,
+    "p95_latency_ms": 22818,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "deleted": {
+        "cases": 1,
+        "pass_rate": 1.0
+      },
+      "direct": {
+        "cases": 20,
+        "pass_rate": 0.75
+      },
+      "injection": {
+        "cases": 2,
+        "pass_rate": 1.0
+      },
+      "multi_article": {
+        "cases": 3,
+        "pass_rate": 0.333
+      },
+      "paraphrase": {
+        "cases": 2,
+        "pass_rate": 0.5
+      },
+      "unanswerable": {
+        "cases": 4,
+        "pass_rate": 0.75
+      }
+    }
+  },
+  "groq:openai/gpt-oss-120b": {
+    "cases": 32,
+    "pass_rate": 0.75,
+    "mean_quality": 0.859,
+    "p50_latency_ms": 16043,
+    "p95_latency_ms": 24939,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "deleted": {
+        "cases": 1,
+        "pass_rate": 1.0
+      },
+      "direct": {
+        "cases": 20,
+        "pass_rate": 0.75
+      },
+      "injection": {
+        "cases": 2,
+        "pass_rate": 1.0
+      },
+      "multi_article": {
+        "cases": 3,
+        "pass_rate": 0.333
+      },
+      "paraphrase": {
+        "cases": 2,
+        "pass_rate": 0.5
+      },
+      "unanswerable": {
+        "cases": 4,
+        "pass_rate": 1.0
+      }
+    }
+  }
+}

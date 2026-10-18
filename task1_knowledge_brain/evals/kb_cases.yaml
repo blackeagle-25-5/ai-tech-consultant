@@ -29,7 +29,7 @@
    key_facts: ["Cancel from Transaction History or the member's Payment History", "It does not deactivate the member account"]}
 - {id: K09, group: direct, expect: answered, expected_articles: ["5000568062", "5000558475"],
    question: "Which fields are mandatory when importing members from a CSV?",
-   key_facts: ["name or company", "listing_type", "country_code"]}
+   key_facts: ["name or company", "listing_type", "country_code", "profession_name"]}
 - {id: K10, group: direct, expect: answered, expected_articles: ["5000559800"],
    question: "How do I open webmail for one of my mailboxes from the admin area?",
    key_facts: ["Settings > Domain Manager > Mailboxes (or Emails > Email Accounts)", "Needs a custom domain mailbox; allow pop-ups"]}

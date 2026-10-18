@@ -11,7 +11,7 @@ import uuid
 from dataclasses import dataclass
 
 from common.llm import HAIKU, LLM, SONNET, LLMError, llm_configured
-from task1_knowledge_brain.app import escalations
+from task1_knowledge_brain.app import completeness, escalations, safety
 from task1_knowledge_brain.app.qa import generate_answer, validated_citations
 from task1_knowledge_brain.app.schemas import QueryResponse, Source
 from task1_knowledge_brain.config import Settings, get_settings
@@ -20,6 +20,10 @@ from task1_knowledge_brain.ingestion.crawler import PoliteFetcher, make_client
 from task1_knowledge_brain.ingestion.pipeline import RunReport, run_ingestion
 from task1_knowledge_brain.retrieval.index import ChunkIndex, Embedder, FastEmbedder, SearchHit
 
+PERSONAL_INFO_MESSAGE = ("I can't share personal information about individuals, and the help center is not a source "
+                         "for it. For company contact details, please use the official support channels.")
+UNSUPPORTED_MESSAGE = ("I couldn't verify a complete answer from the help center, so I've passed this to a "
+                       "human expert.")
 MODEL_ALIASES = {"haiku": HAIKU, "sonnet": SONNET}
 
 
@@ -93,9 +97,10 @@ class KnowledgeService:
 
         def respond(status: str, answer: str, cited: list[SearchHit], confidence: str,
                     reason: str | None, cost: float = 0.0, prompt_version: str | None = None,
-                    used_model: str | None = None) -> QueryResponse:
+                    used_model: str | None = None, notes: list[str] | None = None,
+                    allow_escalation: bool = True) -> QueryResponse:
             escalation_id = None
-            if status == "insufficient_evidence" and escalate:
+            if status == "insufficient_evidence" and escalate and allow_escalation:
                 evidence = [{"title": h.title, "url": h.url, "similarity": round(h.similarity, 3)}
                             for h in hits[:5]]
                 escalation_id = escalations.create(self.conn, question, reason or "insufficient evidence",
@@ -104,9 +109,13 @@ class KnowledgeService:
                 request_id=request_id, status=status, answer=answer,
                 sources=merge_sources(cited),
                 confidence=confidence, needs_human=status != "answered", escalation_id=escalation_id,
-                model=used_model, prompt_version=prompt_version,
+                model=used_model, prompt_version=prompt_version, safety_notes=notes or [],
                 latency_ms=int((time.perf_counter() - start) * 1000), cost_usd=round(cost, 6))
 
+        if safety.is_personal_info_request(question):
+            # Not escalated: an expert should not answer this either.
+            return respond("insufficient_evidence", PERSONAL_INFO_MESSAGE, [], "low", "personal information request",
+                           notes=["personal information request declined"], allow_escalation=False)
         if not hits or best < self.settings.min_relevance:
             return respond("insufficient_evidence",
                            "I could not find this in the help center, so I've passed it to a human expert.",
@@ -118,13 +127,31 @@ class KnowledgeService:
         draft = result.value
         cited = validated_citations(draft, labels)
         if draft.status == "answered" and not cited:
-            # An answer that cites nothing we supplied is treated as unsupported.
-            return respond("insufficient_evidence", draft.answer, [], "low",
+            # An answer that cites nothing we supplied is treated as unsupported; its text is not passed on.
+            return respond("insufficient_evidence", UNSUPPORTED_MESSAGE, [], "low",
                            "model answer had no valid citation", result.record.cost_usd,
-                           prompt_version, result.record.model)
+                           prompt_version, result.record.model, notes=["answer had no valid citation"])
+        notes: list[str] = []
+        cost = result.record.cost_usd
+        if draft.status == "answered":
+            omitted = completeness.missing_items(question, draft.answer, hits, cited)
+            if omitted:
+                # One repair attempt that names what the evidence lists but the answer left out.
+                retry, labels, prompt_version = generate_answer(self.llm, question, hits, model_id, omitted=omitted)
+                cost += retry.record.cost_usd
+                retry_cited = validated_citations(retry.value, labels)
+                if retry.value.status == "answered" and retry_cited:
+                    result, draft, cited = retry, retry.value, retry_cited
+                still = completeness.missing_items(question, draft.answer, hits, cited)
+                notes.append(f"completeness repair for {', '.join(omitted)}"
+                             + (f"; still missing {', '.join(still)}" if still else "; fixed"))
+            problems = safety.check_answer(draft.answer, hits)
+            if problems:
+                return respond("insufficient_evidence", UNSUPPORTED_MESSAGE, [], "low",
+                               "unsupported specifics: " + "; ".join(problems)[:300], cost,
+                               prompt_version, result.record.model, notes=notes + problems)
         return respond(draft.status, draft.answer, cited, draft.confidence,
-                       "model reported insufficient evidence", result.record.cost_usd,
-                       prompt_version, result.record.model)
+                       "model reported insufficient evidence", cost, prompt_version, result.record.model, notes=notes)
 
 
 def merge_sources(cited: list[SearchHit]) -> list[Source]:

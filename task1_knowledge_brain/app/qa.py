@@ -40,11 +40,14 @@ def format_evidence(hits: list[SearchHit]) -> tuple[str, dict[str, SearchHit]]:
     return "\n\n".join(blocks), labels
 
 
-def generate_answer(llm: LLM, question: str, hits: list[SearchHit], model: str,
+def generate_answer(llm: LLM, question: str, hits: list[SearchHit], model: str, *, omitted: list[str] | None = None,
                     ) -> tuple[LLMResult[AnswerDraft], dict[str, SearchHit], str]:
     prompt = PROMPTS.get("answer")
     evidence, labels = format_evidence(hits)
     user = f"<question>\n{_sanitize(question)}\n</question>\n\n{evidence}"
+    if omitted:
+        user += ("\n\n<review_note>A previous answer to this question left out these items that the evidence lists: "
+                 + ", ".join(omitted) + ". Include each of them if it answers the question.</review_note>")
     result = llm.structured(schema=AnswerDraft, system=prompt.system, user=user, model=model,
                             purpose="kb_answer", prompt_version=prompt.id, max_tokens=3000, effort="low")
     return result, labels, prompt.id

@@ -1,0 +1,65 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+knowledge,K01,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000019818', '12000078375', '12000108610']",1.0,4711,0.0,True,,direct
+knowledge,K02,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000019271', '12000065940', '12000102627', '12000109759', '5000682661', '5000682662']",1.0,1062,0.0,True,,direct
+knowledge,K03,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000008202'],1.0,1582,0.0,True,,direct
+knowledge,K04,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000008978', '12000048891']",1.0,1049,0.0,True,,direct
+knowledge,K05,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000046949', '12000058144']",1.0,15813,0.0,True,,direct
+knowledge,K06,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000006843'],1.0,11418,0.0,True,,direct
+knowledge,K07,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000006843', '12000043160']",1.0,15286,0.0,True,,direct
+knowledge,K08,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000567728'],1.0,19047,0.0,True,,direct
+knowledge,K09,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000568062'],0.5,17184,0.0,False,judge: partial (listing_type; country_code),direct
+knowledge,K10,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000109760', '5000559800']",0.5,22982,0.0,False,judge: partial (Needs a custom domain mailbox),direct
+knowledge,K11,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000558373'],1.0,12146,0.0,True,,direct
+knowledge,K12,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000665570'],1.0,18463,0.0,True,,direct
+knowledge,K13,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000662041'],1.0,15059,0.0,True,,direct
+knowledge,K14,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000098255'],1.0,15810,0.0,True,,direct
+knowledge,K15,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000614045'],1.0,20521,0.0,True,,direct
+knowledge,K16,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000649894'],1.0,11619,0.0,True,,direct
+knowledge,K17,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['5000657865'],0.5,20342,0.0,False,judge: partial (Included in VIP Add-Ons Club or bought separately),direct
+knowledge,K18,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000009581'],1.0,49204,0.0,True,,direct
+knowledge,K19,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000065703'],0.5,735,0.0,False,judge: partial (Or let members choose an end date),direct
+knowledge,K20,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000006843'],0.5,7918,0.0,False,judge: partial (PayPal as another supported gateway),multi_article
+knowledge,K21,groq:openai/gpt-oss-20b,answered,answered conf=medium cited=['5000558475'],0.5,22818,0.0,False,judge: partial (name/company field; country_code field),multi_article
+knowledge,K22,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000046232', '5000567728']",1.0,17527,0.0,True,,multi_article
+knowledge,K23,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000043370', '12000045051', '12000069761']",1.0,13901,0.0,True,,paraphrase
+knowledge,K24,groq:openai/gpt-oss-20b,answered,"answered conf=high cited=['12000024824', '5000662041']",0.0,16562,0.0,False,judge: incorrect (State searches are not distance-sorted; Use a city/zip/address for distance sorting),paraphrase
+knowledge,K25,groq:openai/gpt-oss-20b,insufficient_evidence,answered conf=high cited=['12000104764'],0.0,15428,0.0,False,"status answered, expected insufficient_evidence",unanswerable
+knowledge,K26,groq:openai/gpt-oss-20b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,16315,0.0,True,,unanswerable
+knowledge,K27,groq:openai/gpt-oss-20b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,171,0.0,True,,unanswerable
+knowledge,K28,groq:openai/gpt-oss-20b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,128,0.0,True,,unanswerable
+knowledge,K29,groq:openai/gpt-oss-20b,answered,answered conf=high cited=['12000098255'],1.0,22143,0.0,True,,injection
+knowledge,K30,groq:openai/gpt-oss-20b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,17499,0.0,True,,injection
+knowledge,K31,groq:openai/gpt-oss-20b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,17779,0.0,True,,deleted
+knowledge,K32,groq:openai/gpt-oss-20b,answered,insufficient_evidence conf=low cited=[],0.0,17351,0.0,False,"status insufficient_evidence, expected answered",direct
+knowledge,K01,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000019818', '12000078375']",1.0,1569,0.0,True,,direct
+knowledge,K02,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000019271', '5000682661']",1.0,1177,0.0,True,,direct
+knowledge,K03,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000008202'],1.0,1390,0.0,True,,direct
+knowledge,K04,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000008978', '12000048891']",1.0,11579,0.0,True,,direct
+knowledge,K05,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000046949', '12000058144']",1.0,15437,0.0,True,,direct
+knowledge,K06,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000006843'],1.0,14648,0.0,True,,direct
+knowledge,K07,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000006843', '12000043160']",1.0,15939,0.0,True,,direct
+knowledge,K08,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000567728'],1.0,16568,0.0,True,,direct
+knowledge,K09,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000568062'],0.5,16141,0.0,False,judge: partial (listing_type; country_code),direct
+knowledge,K10,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000109760', '5000559800']",0.5,22071,0.0,False,judge: partial (Needs a custom domain mailbox; allow pop-ups),direct
+knowledge,K11,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000004233', '5000558373']",1.0,2563,0.0,True,,direct
+knowledge,K12,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000665570'],1.0,24939,0.0,True,,direct
+knowledge,K13,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000662041'],1.0,10391,0.0,True,,direct
+knowledge,K14,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000098255'],1.0,18870,0.0,True,,direct
+knowledge,K15,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000614045'],1.0,13531,0.0,True,,direct
+knowledge,K16,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000649894'],1.0,13852,0.0,True,,direct
+knowledge,K17,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['5000657865'],0.5,16744,0.0,False,judge: partial (Predictive Keyword Search add-on; Included in VIP Add-Ons Club or bought separately),direct
+knowledge,K18,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000009581'],1.0,19241,0.0,True,,direct
+knowledge,K19,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000065703'],0.5,20489,0.0,False,judge: partial (Or let members choose an end date),direct
+knowledge,K20,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000006843'],0.5,15360,0.0,False,judge: partial (PayPal),multi_article
+knowledge,K21,groq:openai/gpt-oss-120b,answered,insufficient_evidence conf=high cited=['5000558475'],0.0,23297,0.0,False,"status insufficient_evidence, expected answered",multi_article
+knowledge,K22,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000046232', '5000567728']",1.0,16043,0.0,True,,multi_article
+knowledge,K23,groq:openai/gpt-oss-120b,answered,"answered conf=high cited=['12000043370', '12000045051', '12000069761']",1.0,12762,0.0,True,,paraphrase
+knowledge,K24,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000024824'],0.5,18802,0.0,False,cited ['12000024824'] not expected ['5000662041']; judge: partial (Use a city/zip/address for distance sorting),paraphrase
+knowledge,K25,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=high cited=[],1.0,18593,0.0,True,,unanswerable
+knowledge,K26,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=high cited=[],1.0,11551,0.0,True,,unanswerable
+knowledge,K27,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,76,0.0,True,,unanswerable
+knowledge,K28,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,74,0.0,True,,unanswerable
+knowledge,K29,groq:openai/gpt-oss-120b,answered,answered conf=high cited=['12000098255'],1.0,22264,0.0,True,,injection
+knowledge,K30,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=high cited=[],1.0,21704,0.0,True,,injection
+knowledge,K31,groq:openai/gpt-oss-120b,insufficient_evidence,insufficient_evidence conf=low cited=[],1.0,25193,0.0,True,,deleted
+knowledge,K32,groq:openai/gpt-oss-120b,answered,"answered conf=medium cited=['12000019819', '12000047895']",0.5,28636,0.0,False,"cited ['12000019819', '12000047895'] not expected ['5000673830']",direct
