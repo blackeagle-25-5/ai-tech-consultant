@@ -19,7 +19,9 @@ try:
     health = kb.health()
     st.success(f"Knowledge service online: {health['articles_active']} articles, "
                f"{health['chunks_active']} searchable passages."
-               + ("" if health["llm_configured"] else "  Claude is NOT configured: answers are disabled."))
+               + ("" if health["llm_configured"] else "  No model key configured: answers are disabled."))
+    if health.get("llm_provider") == "groq":
+        st.warning("Running on the TEMPORARY Groq fallback, not Claude. Final results and the demo must use Claude.")
 except KnowledgeUnavailable:
     st.error("Knowledge service unavailable. Start it with `python run.py` and try again.")
     st.stop()

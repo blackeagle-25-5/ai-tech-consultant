@@ -144,6 +144,8 @@ Claude Haiku 5.5 ($0.10/$0.50 per M tokens) and Claude Sonnet 5.5 ($2/$10) were 
 | Scope agents | _filled in from measured comparison_ | |
 | Eval judge, prompt learner | Sonnet | fixed, stronger grader; low volume |
 
+**Temporary development fallback.** With no Claude credit available during development, `LLM_PROVIDER=groq` routes the Haiku role to `openai/gpt-oss-20b`, the Sonnet role to `openai/gpt-oss-120b` and screenshots to `qwen/qwen3.8-27b` (`common/groq_client.py`, strict JSON-schema output, retries on 429 using `retry-after`). Every ledger entry and eval row records the model that actually ran, so Groq results are never reported as Claude. Claude remains the target for final evaluations and the demo, as the brief requires.
+
 ## 8. Features we dropped, and why
 
 - **TypeScript for Task 2**: the developer is a beginner in TypeScript, and the brief allows Python. Mixing languages within one task is avoided.

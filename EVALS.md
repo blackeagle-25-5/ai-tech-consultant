@@ -6,6 +6,7 @@ Every number here comes from a script in this repo; raw per-case rows (failures 
 Method, in short: frozen test sets, the same inputs for each model, model and prompt version recorded per row,
 cost from the API's token counts × list price (Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10 per M tokens),
 latency measured end to end per case (p50/p95). Claude Sonnet 5.5 is the fixed judge where a judge is needed.
+Rows whose model starts with `groq:` come from the temporary Groq development fallback (free tier, cost recorded as $0); they are useful as an extra comparison but are **not** the Claude results the brief requires.
 
 ## Task 1 — Knowledge Brain (31 cases: `task1_knowledge_brain/evals/kb_cases.yaml`)
 

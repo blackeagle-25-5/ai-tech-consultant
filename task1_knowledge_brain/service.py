@@ -6,12 +6,11 @@ The API (app/api.py), the CLI and the evals all use this one object.
 from __future__ import annotations
 
 import asyncio
-import os
 import time
 import uuid
 from dataclasses import dataclass
 
-from common.llm import HAIKU, LLM, SONNET, LLMError
+from common.llm import HAIKU, LLM, SONNET, LLMError, llm_configured
 from task1_knowledge_brain.app import escalations
 from task1_knowledge_brain.app.qa import generate_answer, validated_citations
 from task1_knowledge_brain.app.schemas import QueryResponse, Source
@@ -115,7 +114,7 @@ class KnowledgeService:
                            "I could not find this in the help center, so I've passed it to a human expert.",
                            [], "low", f"low retrieval relevance ({best:.2f})")
         if self.llm is None:
-            raise LLMUnavailable("ANTHROPIC_API_KEY is not configured.")
+            raise LLMUnavailable("No model key configured (set ANTHROPIC_API_KEY, or GROQ_API_KEY for the dev fallback).")
 
         result, labels, prompt_version = generate_answer(self.llm, question, hits, model_id)
         draft = result.value
@@ -124,10 +123,10 @@ class KnowledgeService:
             # An answer that cites nothing we supplied is treated as unsupported.
             return respond("insufficient_evidence", draft.answer, [], "low",
                            "model answer had no valid citation", result.record.cost_usd,
-                           prompt_version, model_id)
+                           prompt_version, result.record.model)
         return respond(draft.status, draft.answer, cited, draft.confidence,
                        "model reported insufficient evidence", result.record.cost_usd,
-                       prompt_version, model_id)
+                       prompt_version, result.record.model)
 
 
 def build_service(settings: Settings | None = None, embedder: Embedder | None = None,
@@ -135,7 +134,7 @@ def build_service(settings: Settings | None = None, embedder: Embedder | None = 
     settings = settings or get_settings()
     conn = connect(settings.db_path)
     index = ChunkIndex(conn, embedder or FastEmbedder())
-    if llm is None and (os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")):
+    if llm is None and llm_configured():
         llm = LLM()
     return KnowledgeService(settings=settings, index=index, llm=llm)
 

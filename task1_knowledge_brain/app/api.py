@@ -82,6 +82,7 @@ def health() -> dict:
         "articles_active": status["articles_active"],
         "chunks_active": status["chunks_active"],
         "llm_configured": s.llm is not None,
+        "llm_provider": s.llm.provider if s.llm else None,
         "ingestion_running": status["running"],
     }
 

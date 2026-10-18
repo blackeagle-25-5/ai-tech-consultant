@@ -29,12 +29,50 @@ HAIKU = "claude-haiku-5-5"
 SONNET = "claude-sonnet-5-5"
 OPUS = "claude-opus-5-5"
 
-# USD per 1M tokens (input, output). Source: Anthropic pricing table, cached 2026-10-06.
+# Temporary Groq fallback (see common/groq_client.py). Claude role -> Groq model; override via .env.
+GROQ_SMALL = os.getenv("GROQ_SMALL_MODEL", "openai/gpt-oss-20b")
+GROQ_LARGE = os.getenv("GROQ_LARGE_MODEL", "openai/gpt-oss-120b")
+GROQ_VISION = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")
+GROQ_ROLE = {HAIKU: GROQ_SMALL, SONNET: GROQ_LARGE, OPUS: GROQ_LARGE}
+
+# USD per 1M tokens (input, output). Anthropic pricing table, cached 2026-10-06.
+# Groq models are recorded at $0 because they run on the free tier (not a paid list price).
 PRICES: dict[str, tuple[float, float]] = {
     HAIKU: (0.10, 0.50),
     SONNET: (2.00, 10.00),
     OPUS: (4.00, 20.00),
+    GROQ_SMALL: (0.0, 0.0),
+    GROQ_LARGE: (0.0, 0.0),
+    GROQ_VISION: (0.0, 0.0),
 }
+
+
+def provider() -> str:
+    """'anthropic' (default, required for final results) or 'groq' (temporary development fallback)."""
+    explicit = os.getenv("LLM_PROVIDER", "").strip().lower()
+    if explicit in ("anthropic", "groq"):
+        return explicit
+    has_claude = bool(os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"))
+    return "groq" if not has_claude and os.getenv("GROQ_API_KEY") else "anthropic"
+
+
+def llm_configured() -> bool:
+    if provider() == "groq":
+        return bool(os.getenv("GROQ_API_KEY"))
+    return bool(os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"))
+
+
+def resolve_model(model: str, has_image: bool = False) -> str:
+    """The model id actually called for a requested Claude model under the active provider."""
+    if provider() != "groq":
+        return model
+    return GROQ_VISION if has_image else GROQ_ROLE.get(model, model)
+
+
+def model_label(model: str) -> str:
+    """Honest label for eval rows, e.g. 'claude-haiku-5-5' or 'groq:openai/gpt-oss-20b'."""
+    actual = resolve_model(model)
+    return actual if actual == model else f"groq:{actual}"
 
 ROOT = Path(__file__).resolve().parent.parent
 LEDGER_PATH = Path(os.getenv("LLM_LEDGER_PATH", ROOT / "data" / "llm_ledger.jsonl"))
@@ -47,7 +85,9 @@ class LLMError(RuntimeError):
 
 
 def cost_usd(model: str, input_tokens: int, output_tokens: int) -> float:
-    price_in, price_out = PRICES.get(model, PRICES[SONNET])
+    if model not in PRICES:
+        raise LLMError(f"No price configured for model {model!r}; add it to PRICES.")
+    price_in, price_out = PRICES[model]
     return (input_tokens * price_in + output_tokens * price_out) / 1_000_000
 
 
@@ -85,10 +125,17 @@ class LLM:
     """Structured-output client. Pass a fake `client` in tests."""
 
     def __init__(self, client: Any | None = None, timeout_s: float = 90.0) -> None:
+        # An injected client (tests) is used as-is, with Claude model ids.
+        self.provider = "anthropic" if client is not None else provider()
         if client is None:
-            import anthropic
+            if self.provider == "groq":
+                from common.groq_client import GroqAnthropicAdapter
 
-            client = anthropic.Anthropic(max_retries=3, timeout=timeout_s)
+                client = GroqAnthropicAdapter(timeout_s=timeout_s)
+            else:
+                import anthropic
+
+                client = anthropic.Anthropic(max_retries=3, timeout=timeout_s)
         self.client = client
 
     def structured(
@@ -104,8 +151,11 @@ class LLM:
         effort: str | None = "low",
         schema_retries: int = 1,
     ) -> LLMResult[T]:
-        """Call Claude and return a validated `schema` instance."""
+        """Call the model and return a validated `schema` instance. `model` is a Claude id; under the
+        temporary Groq provider it is mapped to the Groq model playing that role (recorded in the ledger)."""
         content = user if isinstance(user, list) else [{"type": "text", "text": user}]
+        if self.provider == "groq":
+            model = GROQ_VISION if any(b.get("type") == "image" for b in content) else GROQ_ROLE.get(model, model)
         kwargs: dict[str, Any] = {
             "model": model,
             "max_tokens": max_tokens,

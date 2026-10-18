@@ -9,7 +9,6 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import os
 import sqlite3
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -21,7 +20,7 @@ from task1_knowledge_brain.ingestion.parser import ParsedArticle, Section, parse
 from task1_knowledge_brain.ingestion.sitemap import (
     SitemapEntry, diff_against_manifest, parse_sitemap, record_entries,
 )
-from task1_knowledge_brain.retrieval.chunker import chunk_article, image_chunk, make_chunk_id
+from task1_knowledge_brain.retrieval.chunker import chunk_article, make_chunk_id
 from task1_knowledge_brain.retrieval.index import ChunkIndex
 
 log = logging.getLogger(__name__)
@@ -251,7 +250,3 @@ def _save_progress(conn: sqlite3.Connection, report: RunReport, status: str) -> 
             (status, report.added, report.updated, report.removed, report.unchanged, report.failed,
              report.images_described, report.message, now() if status != "running" else None,
              report.run_id))
-
-
-def api_key_available() -> bool:
-    return bool(os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN"))

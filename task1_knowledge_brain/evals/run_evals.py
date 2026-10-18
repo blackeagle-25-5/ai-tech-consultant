@@ -21,7 +21,7 @@ import yaml
 from pydantic import BaseModel, Field
 
 from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
-from common.llm import HAIKU, LLM, SONNET
+from common.llm import HAIKU, LLM, SONNET, model_label
 from task1_knowledge_brain.config import get_settings
 from task1_knowledge_brain.service import build_service
 
@@ -135,6 +135,8 @@ def main() -> None:
         rows = retrieval_eval(service)
     else:
         rows = [r for m in args.models.split(",") for r in answer_eval(service, m)]
+        for r in rows:  # label rows with the model that actually ran (Claude, or the Groq fallback)
+            r.model = model_label(MODELS[r.model]) if r.model in MODELS else r.model
     path = write_rows(f"knowledge_{args.part}", rows)
     summary = summarize(rows)
     save_summary(f"knowledge_{args.part}", summary)

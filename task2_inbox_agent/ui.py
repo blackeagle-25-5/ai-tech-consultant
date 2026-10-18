@@ -1,12 +1,12 @@
 """Screen 2 - Inbox Review. A person approves, edits, rejects or escalates every AI draft."""
 
 import json
-import os
 
 import pandas as pd
 import streamlit as st
 
 from common.kb_client import KnowledgeClient
+from common.llm import llm_configured, provider
 from task2_inbox_agent import dataset
 from task2_inbox_agent.agent import build_agent
 from task2_inbox_agent.autonomy import THRESHOLD
@@ -24,8 +24,11 @@ def agent():
 st.title("Inbox Review")
 st.caption("Every reply is drafted from the help center and checked by safety rules. Nothing is sent without a "
            "person, unless a category has earned autonomy. Sending is simulated (no real emails).")
-if not (os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")):
-    st.error("ANTHROPIC_API_KEY is not set, so new emails cannot be processed. Add it to .env and restart.")
+if not llm_configured():
+    st.error("No model key set (ANTHROPIC_API_KEY, or GROQ_API_KEY for the dev fallback), so new emails cannot be processed. "
+             "Add it to .env and restart.")
+elif provider() == "groq":
+    st.warning("Running on the TEMPORARY Groq fallback, not Claude. Final results and the demo must use Claude.")
 a = agent()
 store = a.store
 

@@ -1,4 +1,5 @@
-"""Meeting-to-Scope evaluation. Needs the Knowledge Brain API running (python run.py) and ANTHROPIC_API_KEY.
+"""Meeting-to-Scope evaluation. Needs the Knowledge Brain API running (python run.py) and a model key
+(ANTHROPIC_API_KEY; GROQ_API_KEY works as a temporary fallback, labelled as such in the results).
 
   python -m task3_meeting_to_scope.evals.run_evals --models haiku,sonnet
 
@@ -18,7 +19,7 @@ import yaml
 
 from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
 from common.kb_client import KnowledgeClient
-from common.llm import HAIKU, LLM, SONNET
+from common.llm import HAIKU, LLM, SONNET, model_label
 from task3_meeting_to_scope import transcript as tx
 from task3_meeting_to_scope.orchestrator import Models, ScopePipeline
 from task3_meeting_to_scope.store import NotApproved, ScopeStore
@@ -144,6 +145,8 @@ def main() -> None:
     rows: list[EvalRow] = []
     for m in args.models.split(","):
         rows += run_model(m, kb)
+    for r in rows:  # label rows with the model that actually ran (Claude, or the Groq fallback)
+        r.model = model_label(MODELS[r.model]) if r.model in MODELS else r.model
     path = write_rows("scope", rows)
     summary = summarize(rows)
     save_summary("scope", summary)

@@ -1,4 +1,5 @@
-"""Inbox Agent evaluation.  Needs the Knowledge Brain API running (python run.py) and ANTHROPIC_API_KEY.
+"""Inbox Agent evaluation.  Needs the Knowledge Brain API running (python run.py) and a model key
+(ANTHROPIC_API_KEY; GROQ_API_KEY works as a temporary fallback, labelled as such in the results).
 
   python -m task2_inbox_agent.evals.run_evals --part classify            # 65 emails x 2 models
   python -m task2_inbox_agent.evals.run_evals --part draft --limit 25    # end-to-end drafts, judged
@@ -19,7 +20,7 @@ from pydantic import BaseModel, Field
 
 from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
 from common.kb_client import KnowledgeClient
-from common.llm import HAIKU, LLM, SONNET
+from common.llm import HAIKU, LLM, SONNET, model_label
 from task2_inbox_agent.agent import InboxAgent
 from task2_inbox_agent.dataset import LabelledEmail, load
 from task2_inbox_agent.store import InboxStore
@@ -152,6 +153,8 @@ def main() -> None:
         if args.part in ("kb_down", "all"):
             how_tos = [e for e in dev if e.expected.category == "how_to"][:3]
             rows += eval_kb_down(how_tos, m)
+    for r in rows:  # label rows with the model that actually ran (Claude, or the Groq fallback)
+        r.model = model_label(MODELS[r.model]) if r.model in MODELS else r.model
     path = write_rows(f"inbox_{args.part}", rows)
     summary = summarize(rows)
     save_summary(f"inbox_{args.part}", summary)

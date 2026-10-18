@@ -48,6 +48,6 @@ Results go to `evals_results/`. See `EVALS.md` for numbers, `DESIGN.md` for arch
 and `AI_LOG.md` for how Claude Code was used.
 
 ## Configuration (`.env`)
-`ANTHROPIC_API_KEY` (required for answers and drafts) · `KB_API_KEY` (optional API protection) ·
+`ANTHROPIC_API_KEY` (required for answers and drafts) · `GROQ_API_KEY` (temporary free fallback for development only, used when no Claude key is set; results are labelled `groq:` and are not the final Claude results) · `KB_API_KEY` (optional API protection) ·
 `CRAWL_CONCURRENCY` / `CRAWL_DELAY_S` (politeness) · `MAX_IMAGES` (vision budget per run) ·
 `KB_ANSWER_MODEL`, `SCOPE_*_MODEL` (model routing). Pricing assumptions for proposals: `task3_meeting_to_scope/pricing.yaml`.

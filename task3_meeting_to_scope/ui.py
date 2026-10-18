@@ -1,12 +1,12 @@
 """Screen 3 - Scope Builder. Transcript in; requirements, feasibility, estimate, proposal and changes out.
 Nothing can be sent to the client until a person approves the version."""
 
-import os
 
 import pandas as pd
 import streamlit as st
 
 from common.kb_client import KnowledgeClient
+from common.llm import llm_configured, provider
 from task3_meeting_to_scope import transcript as tx
 from task3_meeting_to_scope.orchestrator import build_pipeline
 from task3_meeting_to_scope.store import NotApproved
@@ -23,8 +23,11 @@ def pipeline():
 st.title("Scope Builder")
 st.caption("Turns client meeting transcripts into a scope of work, an estimate and a proposal. "
            "Product features are checked against the Knowledge Brain before anything is quoted as custom work.")
-if not (os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")):
-    st.error("ANTHROPIC_API_KEY is not set, so transcripts cannot be analysed. Add it to .env and restart.")
+if not llm_configured():
+    st.error("No model key set (ANTHROPIC_API_KEY, or GROQ_API_KEY for the dev fallback), so transcripts cannot be analysed. "
+             "Add it to .env and restart.")
+elif provider() == "groq":
+    st.warning("Running on the TEMPORARY Groq fallback, not Claude. Final results and the demo must use Claude.")
 p = pipeline()
 store = p.store
 meta = tx.load_meta()["projects"]
@@ -59,7 +62,7 @@ if not versions:
     st.stop()
 
 labels = {v["id"]: f"v{v['number']} · {v['status'].upper()} · {v['created_at'][:16]}"
-          + (f" · revision of approved baseline" if v["based_on"] else "") for v in versions}
+          + (" · revision of approved baseline" if v["based_on"] else "") for v in versions}
 vid = st.selectbox("Version", list(labels), index=len(labels) - 1, format_func=labels.get)
 v = store.version(vid)
 pl = v["payload"]
