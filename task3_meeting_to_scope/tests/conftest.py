@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 import httpx
 import pytest
 
@@ -70,8 +72,7 @@ class Responder:
             return FeasibilityJudgement(classification="existing_configuration",
                                         explanation="Search filters are configurable.", inherently_custom=False)
         if schema is ScopeOfWork:
-            ids = [line.split('"')[3] for line in user.splitlines() if '"id": "REQ-' in line]
-            ids = list(dict.fromkeys(ids))
+            ids = list(dict.fromkeys(re.findall(r'"id":\s*"(REQ-\d+)"', user)))
             return ScopeOfWork(objective="Better search", current_problem="Hard to find trainers",
                                deliverables=[Deliverable(id=f"D{i}", title=f"Deliverable for {rid}", req_ids=[rid],
                                                          solution="Configure", acceptance_criteria=["It works"],
@@ -79,7 +80,7 @@ class Responder:
                                exclusions=["Mobile app"], assumptions=[], dependencies=[],
                                client_responsibilities=["Provide admin access"], open_questions=[], risks=[])
         if schema is EstimateDraft:
-            n = user.count('"title": "Deliverable for')
+            n = len(re.findall(r'"title":\s*"Deliverable for', user))
             return EstimateDraft(tasks=[EstimateTask(deliverable_id=f"D{i}", name="Build", low_hours=2,
                                                      likely_hours=4, high_hours=6, assumptions="", confidence="medium")
                                         for i in range(1, n + 1)], notes="")

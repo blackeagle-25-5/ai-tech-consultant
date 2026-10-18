@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import re
 
 from common.llm import LLM
-from task3_meeting_to_scope.agents.base import call, dump
+from task3_meeting_to_scope.agents.base import call
 from task3_meeting_to_scope.agents.estimator import EstimateSummary, Pricing, deliverable_price
 from task3_meeting_to_scope.schemas import (
     FeasibilityResult, ProjectBrief, ProposalNarrative, ReviewFinding, ReviewReport, ScopeOfWork,
@@ -20,10 +21,24 @@ FEAS_LABEL = {
 MONEY = re.compile(r"[$€£₹]\s?\d[\d,]*(?:\.\d+)?|\b\d[\d,]*(?:\.\d+)?\s?(?:usd|dollars|eur|euros|inr)\b", re.I)
 
 
+def compact_inputs(brief: ProjectBrief, scope: ScopeOfWork, feasibility: list[FeasibilityResult]) -> str:
+    """What the proposal and reviewer agents need, without source quotes or KB question text.
+    Keeps each request under the free tier's per-minute input-token cap (a 7.3K-token request was rejected)."""
+    b = {"summary": brief.summary, "budget": brief.budget, "deadline": brief.deadline,
+         "requirements": [{"id": r.id, "title": r.title, "priority": r.priority, "status": r.status,
+                           "origin": r.origin} for r in brief.requirements],
+         "open_questions": [q.text for q in brief.open_questions],
+         "exclusions": [x.text for x in brief.exclusions],
+         "client_commitments": [x.text for x in brief.client_commitments]}
+    f = [{"req_id": x.req_id, "classification": x.classification, "explanation": x.explanation} for x in feasibility]
+    return (f"<project_brief>\n{json.dumps(b, separators=(',', ':'))}\n</project_brief>\n"
+            f"<scope_of_work>\n{scope.model_dump_json()}\n</scope_of_work>\n"
+            f"<feasibility>\n{json.dumps(f, separators=(',', ':'))}\n</feasibility>")
+
+
 def write_narrative(llm: LLM, client: str, brief: ProjectBrief, scope: ScopeOfWork,
                     feasibility: list[FeasibilityResult], model: str) -> tuple[ProposalNarrative, float]:
-    user = (f"Client: {client}\n<project_brief>\n{dump(brief)}\n</project_brief>\n"
-            f"<scope_of_work>\n{dump(scope)}\n</scope_of_work>\n<feasibility>\n{dump(feasibility)}\n</feasibility>")
+    user = f"Client: {client}\n" + compact_inputs(brief, scope, feasibility)
     res = call(llm, "proposal", ProposalNarrative, user, model, effort="medium")
     return res.value, res.record.cost_usd
 
@@ -80,9 +95,8 @@ def render(client: str, brief: ProjectBrief, scope: ScopeOfWork, feasibility: li
 def review(llm: LLM, brief: ProjectBrief, scope: ScopeOfWork, feasibility: list[FeasibilityResult],
            narrative: ProposalNarrative, est: EstimateSummary, model: str) -> tuple[ReviewReport, float]:
     findings = deterministic_checks(narrative, scope, feasibility, est)
-    user = (f"<project_brief>\n{dump(brief)}\n</project_brief>\n<scope_of_work>\n{dump(scope)}\n</scope_of_work>\n"
-            f"<feasibility>\n{dump(feasibility)}\n</feasibility>\n<proposal_narrative>\n{dump(narrative)}\n"
-            "</proposal_narrative>")
+    user = (compact_inputs(brief, scope, feasibility)
+            + f"\n<proposal_narrative>\n{narrative.model_dump_json()}\n</proposal_narrative>")
     res = call(llm, "reviewer", ReviewReport, user, model, effort="medium")
     return ReviewReport(findings=findings + res.value.findings), res.record.cost_usd
 

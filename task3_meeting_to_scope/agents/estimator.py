@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 
 from common.llm import LLM
-from task3_meeting_to_scope.agents.base import call, dump
+from task3_meeting_to_scope.agents.base import call, compact_feasibility
 from task3_meeting_to_scope.schemas import EstimateDraft, EstimateTask, FeasibilityResult, ScopeOfWork
 
 PRICING_PATH = Path(__file__).resolve().parent.parent / "pricing.yaml"
@@ -45,7 +45,8 @@ class EstimateSummary:
 
 def estimate(llm: LLM, scope: ScopeOfWork, feasibility: list[FeasibilityResult], model: str,
              ) -> tuple[EstimateDraft, list[str], float]:
-    user = f"<scope_of_work>\n{dump(scope)}\n</scope_of_work>\n<feasibility>\n{dump(feasibility)}\n</feasibility>"
+    user = (f"<scope_of_work>\n{scope.model_dump_json()}\n</scope_of_work>\n"
+            f"<feasibility>\n{compact_feasibility(feasibility)}\n</feasibility>")
     res = call(llm, "estimator", EstimateDraft, user, model, effort="medium")
     draft = res.value
     issues = []
