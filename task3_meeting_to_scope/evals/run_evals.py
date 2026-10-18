@@ -1,5 +1,5 @@
 """Meeting-to-Scope evaluation. Needs the Knowledge Brain API running (python run.py) and a model key
-(ANTHROPIC_API_KEY; GROQ_API_KEY works as a temporary fallback, labelled as such in the results).
+(GROQ_API_KEY, or ANTHROPIC_API_KEY for Claude); rows record the model that actually ran.
 
   python -m task3_meeting_to_scope.evals.run_evals --models haiku,sonnet
 

@@ -29,7 +29,7 @@ HAIKU = "claude-haiku-5-5"
 SONNET = "claude-sonnet-5-5"
 OPUS = "claude-opus-5-5"
 
-# Temporary Groq fallback (see common/groq_client.py). Claude role -> Groq model; override via .env.
+# Groq provider (see common/groq_client.py). Claude role -> Groq model; override via .env.
 GROQ_SMALL = os.getenv("GROQ_SMALL_MODEL", "openai/gpt-oss-20b")
 GROQ_LARGE = os.getenv("GROQ_LARGE_MODEL", "openai/gpt-oss-120b")
 GROQ_VISION = os.getenv("GROQ_VISION_MODEL", "qwen/qwen3.8-27b")
@@ -48,7 +48,7 @@ PRICES: dict[str, tuple[float, float]] = {
 
 
 def provider() -> str:
-    """'anthropic' (default, required for final results) or 'groq' (temporary development fallback)."""
+    """'anthropic' when a Claude key is set, otherwise 'groq'. LLM_PROVIDER forces either."""
     explicit = os.getenv("LLM_PROVIDER", "").strip().lower()
     if explicit in ("anthropic", "groq"):
         return explicit
@@ -152,7 +152,7 @@ class LLM:
         schema_retries: int = 1,
     ) -> LLMResult[T]:
         """Call the model and return a validated `schema` instance. `model` is a Claude id; under the
-        temporary Groq provider it is mapped to the Groq model playing that role (recorded in the ledger)."""
+        Groq provider it is mapped to the Groq model playing that role (recorded in the ledger)."""
         content = user if isinstance(user, list) else [{"type": "text", "text": user}]
         if self.provider == "groq":
             model = GROQ_VISION if any(b.get("type") == "image" for b in content) else GROQ_ROLE.get(model, model)

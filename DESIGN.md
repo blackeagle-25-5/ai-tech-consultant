@@ -18,8 +18,8 @@ business could plug in its own help center, inbox and meetings.
 | Need we found | What we built |
 |---|---|
 | An expert's answer to one customer is not always a product fact. | Expert answers are tagged `general` (searchable) or `customer_specific` (stored, never reused), can expire, and are versioned. |
-| A fluent answer can still be wrong, and a citation can be fake. | Claude may only cite evidence ids we supplied; answers citing nothing valid are downgraded to "insufficient evidence". |
-| Off-topic questions should not cost money. | A calibrated similarity gate abstains before calling Claude (threshold set from measured data, §6). |
+| A fluent answer can still be wrong, and a citation can be fake. | The model may only cite evidence ids we supplied; answers citing nothing valid are downgraded to "insufficient evidence". |
+| Off-topic questions should not cost money. | A calibrated similarity gate abstains before calling the model (threshold set from measured data, §6). |
 | Help articles and customer emails can contain hostile instructions. | Evidence and emails are wrapped as untrusted data, wrapper-closing tags are stripped, and injection phrases are detected and flagged. Tested. |
 | Approving a draft is not the same as accepting it unchanged. | Autonomy counts only drafts whose sent text equals the AI text; one click does not count. |
 | A customer complaining right after an automatic reply is the clearest quality signal. | It revokes that category's autonomy immediately. |
@@ -35,10 +35,10 @@ flowchart LR
   subgraph T1[Task 1 - Knowledge Brain - FastAPI :8000]
     SM[Sitemap diff<br/>+ manifest] --> CR[Polite crawler<br/>robots, rate limit, retries]
     CR --> PA[Parser<br/>text, tables, screenshot context]
-    PA --> VI[Claude Haiku vision<br/>screenshot descriptions]
+    PA --> VI[Vision model<br/>screenshot descriptions]
     PA --> IX[(SQLite: articles, versions,<br/>chunks + vectors + FTS5)]
     VI --> IX
-    IX --> QA[Hybrid search -> relevance gate<br/>-> Claude answer -> citation check]
+    IX --> QA[Hybrid search -> relevance gate<br/>-> LLM answer -> citation check]
     QA --> ES[Escalations -> expert answers]
     ES --> IX
     SCH[Daily scheduler] --> SM
@@ -73,15 +73,15 @@ answer: if the service is down it raises `KnowledgeUnavailable`, and both tasks 
   so a crash loses nothing and a re-run continues. A full crawl took 30.5 minutes including local embedding (EVALS.md).
 - **Parsing.** Only `article.article-body` is used. Headings, numbered steps and tables are kept, and every screenshot
   keeps its position plus the sentence before it (usually the instruction it illustrates). Tracking pixels and banners are dropped.
-- **Screenshots.** Claude Haiku 5.5 describes each screenshot as JSON: description, exact UI labels, steps, and an
+- **Screenshots.** A vision model (Groq `qwen/qwen3.8-27b`; Claude Haiku when Claude is enabled) describes each screenshot as JSON: description, exact UI labels, steps, and an
   `uncertain` flag. The prompt forbids guessing unreadable labels. Descriptions are searchable chunks linked to
-  their article and the original image URL, which the chat screen displays. Haiku costs about 50 times less than Sonnet
-  per screenshot, which is what makes describing thousands of screenshots affordable (count and cost in EVALS.md).
+  their article and the original image URL, which the chat screen displays. With ~6,400 screenshots, the
+  limiting factor on Groq's free tier is the request rate, not money (count and time in EVALS.md).
 - **Storage and search.** SQLite holds everything. Vectors (local `bge-small`, no extra API key) sit in a BLOB column
   and are searched with numpy, and SQLite FTS5 provides BM25 keyword search. At about 15k chunks a dedicated vector database
   adds operations work without measurable benefit. We measured vector, keyword and hybrid search (EVALS.md) and use hybrid.
   Chunk ids are stable hashes, and re-processing replaces an article's chunks, so updates are idempotent.
-- **Answering.** Hybrid top-8 retrieval, then a similarity gate (abstain without a model call below 0.65), then Claude with evidence in
+- **Answering.** Hybrid top-8 retrieval, then a similarity gate (abstain without a model call below 0.65), then the answer model with evidence in
   `<evidence id="E1">` tags and a structured output (`status`, `answer`, `cited_evidence`, `confidence`). Citations
   are validated in code.
 - **Freshness.** A daily 03:00 UTC job re-reads the sitemap and processes only differences. Each article change creates a
@@ -106,7 +106,7 @@ answer: if the service is down it raises `KnowledgeUnavailable`, and both tasks 
   an edited audit revokes autonomy. A complaint after an auto-reply also revokes it. There is a global off switch and a manual revoke.
   Everything is written to the audit log.
 - **Learning.** Two loops. (1) Fast: approved replies become style examples for the next draft of that kind. (2) Measured:
-  `learning.py` asks Claude Sonnet to infer the reviewer's recurring preferences from stored edits, saves them as a new
+  `learning.py` asks the large model to infer the reviewer's recurring preferences from stored edits, saves them as a new
   drafter prompt version that is **not active**, scores both versions on held-out emails (edit rate, guard violations, cost),
   and activates the new one only if it is better. Rollback is one click (Learning tab) or `set_active`.
   For a repeatable experiment we use a deterministic *simulated reviewer* with five house-style rules. It is clearly
@@ -133,18 +133,22 @@ reviewer approves; drafts with blockers need a written note; `deliver()` refuses
 
 ## 7. Model choices
 
-Claude Haiku 5.5 ($0.10/$0.50 per M tokens) and Claude Sonnet 5.5 ($2/$10) were compared on the same test sets
-(EVALS.md). Routing used in the code, configurable via `.env`:
+**Provider decision.** The brief asks for Claude at the centre. The developer had a $0 API budget, so this
+submission runs on **Groq's free tier**. This is a deliberate, documented deviation, not an oversight. The code is
+provider-neutral at one point (`common/llm.py`): every agent asks for a *role* (small/fast or large/careful), and
+the provider maps that role to a model. Setting `ANTHROPIC_API_KEY` switches every task to Claude with no code change.
+The Anthropic path is the original design and is covered by the same tests.
 
-| Job | Model | Why (see EVALS.md for numbers) |
+| Role (Claude equivalent) | Groq model | Used for |
 |---|---|---|
-| Screenshot descriptions | Haiku | high volume; cost dominates |
-| KB answers | _filled in from measured comparison_ | |
-| Email classification / drafting | _filled in from measured comparison_ | |
-| Scope agents | _filled in from measured comparison_ | |
-| Eval judge, prompt learner | Sonnet | fixed, stronger grader; low volume |
+| Small / fast (Haiku) | `openai/gpt-oss-20b` | KB answers, email classification and drafting, scope agents (defaults; see EVALS.md) |
+| Large / careful (Sonnet) | `openai/gpt-oss-120b` | eval judge, prompt learner, and the "large" side of every comparison |
+| Vision | `qwen/qwen3.8-27b` | screenshot descriptions |
 
-**Temporary development fallback.** With no Claude credit available during development, `LLM_PROVIDER=groq` routes the Haiku role to `openai/gpt-oss-20b`, the Sonnet role to `openai/gpt-oss-120b` and screenshots to `qwen/qwen3.8-27b` (`common/groq_client.py`, strict JSON-schema output, retries on 429 using `retry-after`). Every ledger entry and eval row records the model that actually ran, so Groq results are never reported as Claude. Claude remains the target for final evaluations and the demo, as the brief requires.
+Groq requests use strict JSON-schema output (`common/groq_client.py`), wait on 429 using `retry-after`, and never
+retry a 4xx. Every ledger entry and eval row records the model that actually ran. Cost is recorded as $0 because the
+free tier was used. The real constraint is the free-tier rate limit (e.g. 8K tokens/minute for gpt-oss-120b), which
+shows up as latency. The small-vs-large decision for each task is made from the measured comparison in EVALS.md.
 
 ## 8. Features we dropped, and why
 
@@ -158,7 +162,7 @@ Claude Haiku 5.5 ($0.10/$0.50 per M tokens) and Claude Sonnet 5.5 ($2/$10) were 
 ## 9. What breaks (known limits)
 
 - Screenshot descriptions can be wrong. They are labelled as AI-generated, and article text wins when the two disagree.
-- The abstention threshold was calibrated on 31 questions; an off-topic question can score 0.715, above it. In that case Claude's own judgement is the second line of defence.
+- The abstention threshold was calibrated on 31 questions; an off-topic question can score 0.715, above it. In that case the model's own judgement is the second line of defence.
 - The simulated reviewer measures learning against known rules; real reviewers are noisier.
 - Hour estimates have no historical data to compare against yet. Estimate error needs a human reference estimate (EVALS.md).
 - The transcripts used during development are placeholders until the real role-played recordings are added.

@@ -21,7 +21,7 @@ try:
                f"{health['chunks_active']} searchable passages."
                + ("" if health["llm_configured"] else "  No model key configured: answers are disabled."))
     if health.get("llm_provider") == "groq":
-        st.warning("Running on the TEMPORARY Groq fallback, not Claude. Final results and the demo must use Claude.")
+        st.info("Model provider: Groq (open models). Set ANTHROPIC_API_KEY to switch to Claude.")
 except KnowledgeUnavailable:
     st.error("Knowledge service unavailable. Start it with `python run.py` and try again.")
     st.stop()

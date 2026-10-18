@@ -4,9 +4,9 @@ Every number here comes from a script in this repo; raw per-case rows (failures 
 **PENDING** marks evaluations that have not been run yet. They will be filled from real runs, never estimated.
 
 Method, in short: frozen test sets, the same inputs for each model, model and prompt version recorded per row,
-cost from the API's token counts × list price (Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10 per M tokens),
-latency measured end to end per case (p50/p95). Claude Sonnet 5.5 is the fixed judge where a judge is needed.
-Rows whose model starts with `groq:` come from the temporary Groq development fallback (free tier, cost recorded as $0); they are useful as an extra comparison but are **not** the Claude results the brief requires.
+models run on Groq's free tier (cost recorded as $0; token counts are kept, so Claude list-price cost can be computed),
+latency measured end to end per case (p50/p95), including free-tier rate-limit waits. `openai/gpt-oss-120b` is the fixed judge.
+The brief asks for Claude; see DESIGN.md §7 for why this submission uses Groq. Model names in result rows are the models that actually ran.
 
 ## Task 1 — Knowledge Brain (31 cases: `task1_knowledge_brain/evals/kb_cases.yaml`)
 
@@ -23,9 +23,9 @@ Screenshot-only questions: PENDING (added after screenshot descriptions are inge
 
 **Abstention threshold.** Best-chunk similarity: answerable 0.706–0.909 (median 0.831), off-topic 0.525–0.715.
 We raised the gate from 0.45 to **0.65**: 3 of 4 off-topic questions abstain with no model call, no answerable
-question is lost. The fourth (0.715) must be caught by Claude itself: it is a known overlap.
+question is lost. The fourth (0.715) must be caught by the answer model itself: it is a known overlap.
 
-**Answer quality, Haiku vs Sonnet: PENDING** (`--part answer`): status accuracy, citation correctness,
+**Answer quality, gpt-oss-20b vs gpt-oss-120b: PENDING** (`--part answer`): status accuracy, citation correctness,
 judged correctness, injection resistance, p50/p95 latency, $/answer.
 
 **Ingestion reliability (measured):** full crawl of 1,514 remaining articles took 30.5 min at 2 concurrent requests / 1 s delay (incl. local embedding); 1 page failed with a network error and was picked up by the next incremental run (1 retried, 1,539 unchanged, 0 failed). 6,335 unique screenshots found. Screenshot description count and cost: PENDING (needs API key).
@@ -34,7 +34,7 @@ failure, update → re-index with version 2, rollback, removal → not searchabl
 
 ## Task 2 — Inbox Agent (65 emails: 50 dev + 15 held-out)
 
-**Classification (category, risk, urgency), Haiku vs Sonnet: PENDING.**
+**Classification (category, risk, urgency), gpt-oss-20b vs gpt-oss-120b: PENDING.**
 **Drafts, judged (no guard violation, no unsafe commitment, grounded, addresses request, human gate): PENDING.**
 **Knowledge service down (3 emails): PENDING.**
 
@@ -51,7 +51,7 @@ global switch and manual revoke; complaint after auto-reply revokes (`pytest`: 3
 checks (meeting C vs approved A) + 2 approval-gate checks. Gold labels were written for the placeholder transcripts
 and must be re-checked for the real recordings.
 
-**Haiku vs Sonnet for the whole agent team: PENDING.**
+**gpt-oss-20b vs gpt-oss-120b for the whole agent team: PENDING.**
 **Estimate error vs a human reference estimate: PENDING** (needs a reference estimate from a person).
 Approval enforcement is also covered by deterministic tests: unapproved delivery blocked, follow-up without baseline refused,
 blocker approval needs a note, follow-up compared to the approved version, not the latest draft (`pytest`: 14 Task 3 tests).
@@ -66,5 +66,5 @@ blocker approval needs a note, follow-up compared to the approved version, not t
 | retrieval eval | Abstention gate 0.45 never triggered (off-topic scored ≥0.525) | calibrated to 0.65 |
 | UI smoke test | Windows Smart App Control blocked a pandas DLL on first load | transient reputation check; documented |
 | live Groq smoke test (email D05) | "How do I connect Stripe to accept card payments?": the article with the steps ranked 14th (vector 13th), so the bot correctly abstained but the customer got no answer. Capping passages per article did not help. | **open**; added as eval case K32; candidate fixes (larger embedding model, query rewriting) to be measured |
-| live Groq smoke test | images table recorded the requested Claude model instead of the Groq model that ran | record `res.record.model` |
+| live Groq smoke test | images table recorded the requested role name instead of the Groq model that ran | record `res.record.model` |
 | live Groq smoke test | the same article appeared several times in `sources` | merge sources per URL, keep best relevance and all screenshots |

@@ -6,7 +6,7 @@
 3. Score current vs candidate on the 15 HELD-OUT emails (never used for learning); activate only if better.
 
   python -m task2_inbox_agent.evals.run_learning [--train 20]
-Requires the Knowledge Brain API (python run.py) and ANTHROPIC_API_KEY (or GROQ_API_KEY as a temporary fallback).
+Requires the Knowledge Brain API (python run.py) and GROQ_API_KEY (or ANTHROPIC_API_KEY for Claude).
 """
 
 from __future__ import annotations

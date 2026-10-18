@@ -2,7 +2,8 @@
 
 One system that knows a software product, drafts customer email replies, and turns client meetings into
 a scope of work, estimate and proposal. It uses the Brilliant Directories help center as its knowledge
-and keeps Claude at the centre.
+and runs on **Groq** (open models: gpt-oss-20b, gpt-oss-120b, Qwen vision) because no Claude budget was
+available. The brief asks for Claude at the centre; Claude is fully supported and is one `.env` setting away (see DESIGN.md §7).
 
 | Task | Folder | What it does |
 |---|---|---|
@@ -48,6 +49,6 @@ Results go to `evals_results/`. See `EVALS.md` for numbers, `DESIGN.md` for arch
 and `AI_LOG.md` for how Claude Code was used.
 
 ## Configuration (`.env`)
-`ANTHROPIC_API_KEY` (required for answers and drafts) · `GROQ_API_KEY` (temporary free fallback for development only, used when no Claude key is set; results are labelled `groq:` and are not the final Claude results) · `KB_API_KEY` (optional API protection) ·
+`GROQ_API_KEY` (model provider used by this submission) · `ANTHROPIC_API_KEY` (optional: switches everything to Claude) · `KB_API_KEY` (optional API protection) ·
 `CRAWL_CONCURRENCY` / `CRAWL_DELAY_S` (politeness) · `MAX_IMAGES` (vision budget per run) ·
 `KB_ANSWER_MODEL`, `SCOPE_*_MODEL` (model routing). Pricing assumptions for proposals: `task3_meeting_to_scope/pricing.yaml`.

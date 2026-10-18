@@ -1,4 +1,4 @@
-"""The temporary Groq fallback adapter (no network: mocked transport)."""
+"""The Groq provider adapter (no network: mocked transport)."""
 
 import json
 

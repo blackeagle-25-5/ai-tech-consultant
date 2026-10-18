@@ -1,7 +1,6 @@
-"""TEMPORARY development fallback: run the project on Groq's free tier when no Claude credit is available.
+"""Groq provider: runs the project on Groq's free tier (chosen because no Claude budget was available).
 
-The assignment requires Claude at the centre, so final evaluations and the demo must use Claude.
-This adapter exposes the same `client.messages.parse(...)` shape the Anthropic SDK has, so `common.llm.LLM`
+The brief asks for Claude at the centre; Claude remains supported (set ANTHROPIC_API_KEY). This adapter exposes the same `client.messages.parse(...)` shape the Anthropic SDK has, so `common.llm.LLM`
 works unchanged. It talks to Groq's OpenAI-compatible HTTP API with httpx.
 
 Docs checked 2026-10-18: console.groq.com/docs/models, /structured-outputs, /vision, /rate-limits.

@@ -1,5 +1,5 @@
 """Inbox Agent evaluation.  Needs the Knowledge Brain API running (python run.py) and a model key
-(ANTHROPIC_API_KEY; GROQ_API_KEY works as a temporary fallback, labelled as such in the results).
+(GROQ_API_KEY, or ANTHROPIC_API_KEY for Claude); rows record the model that actually ran.
 
   python -m task2_inbox_agent.evals.run_evals --part classify            # 65 emails x 2 models
   python -m task2_inbox_agent.evals.run_evals --part draft --limit 25    # end-to-end drafts, judged

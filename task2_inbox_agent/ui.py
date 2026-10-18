@@ -28,7 +28,7 @@ if not llm_configured():
     st.error("No model key set (ANTHROPIC_API_KEY, or GROQ_API_KEY for the dev fallback), so new emails cannot be processed. "
              "Add it to .env and restart.")
 elif provider() == "groq":
-    st.warning("Running on the TEMPORARY Groq fallback, not Claude. Final results and the demo must use Claude.")
+    st.info("Model provider: Groq (open models). Set ANTHROPIC_API_KEY to switch to Claude.")
 a = agent()
 store = a.store
 
