@@ -65,3 +65,6 @@ blocker approval needs a note, follow-up compared to the approved version, not t
 | unit test | Dataset used urgency "normal" but schema allowed only low/medium/high | urgency is low/normal/high |
 | retrieval eval | Abstention gate 0.45 never triggered (off-topic scored ≥0.525) | calibrated to 0.65 |
 | UI smoke test | Windows Smart App Control blocked a pandas DLL on first load | transient reputation check; documented |
+| live Groq smoke test (email D05) | "How do I connect Stripe to accept card payments?": the article with the steps ranked 14th (vector 13th), so the bot correctly abstained but the customer got no answer. Capping passages per article did not help. | **open**; added as eval case K32; candidate fixes (larger embedding model, query rewriting) to be measured |
+| live Groq smoke test | images table recorded the requested Claude model instead of the Groq model that ran | record `res.record.model` |
+| live Groq smoke test | the same article appeared several times in `sources` | merge sources per URL, keep best relevance and all screenshots |

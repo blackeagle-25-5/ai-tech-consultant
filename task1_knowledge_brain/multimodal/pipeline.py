@@ -49,7 +49,7 @@ async def describe_pending_images(conn: sqlite3.Connection, index: ChunkIndex, l
                             describe_image_bytes, llm, result.content, result.content_type,
                             row["image_url"], article_title=row["title"], section=row["section"] or "",
                             context=row["context"] or "", model=settings.vision_model)
-                        status, description = "done", res.value.model_dump_json()
+                        status, description, model = "done", res.value.model_dump_json(), res.record.model
                         if not res.value.is_informative:
                             status = "skipped"
                     except SkipImage as exc:

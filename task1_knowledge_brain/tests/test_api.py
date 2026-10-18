@@ -125,3 +125,15 @@ def test_api_key_is_enforced_when_configured(client_factory, settings):
     assert c.post("/query", json={"question": "How do I issue a refund?"}).status_code == 401
     ok = c.post("/query", json={"question": "How do I issue a refund?"}, headers={"X-API-Key": "secret"})
     assert ok.status_code == 200
+
+
+def test_sources_are_merged_per_article_and_keep_screenshots():
+    from task1_knowledge_brain.retrieval.index import SearchHit
+    from task1_knowledge_brain.service import merge_sources
+
+    def hit(cid, kind, sim, imgs):
+        return SearchHit(cid, "1", kind, "Logo", "https://x/a/1", "S", "t", imgs, 0.0, sim)
+
+    out = merge_sources([hit("a", "image", 0.7, ["i1"]), hit("b", "article", 0.9, []), hit("c", "image", 0.8, ["i2"])])
+    assert len(out) == 1
+    assert out[0].relevance == 0.9 and out[0].image_urls == ["i1", "i2"] and out[0].source_type == "article"

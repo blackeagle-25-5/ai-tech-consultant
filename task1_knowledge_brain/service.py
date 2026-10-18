@@ -102,9 +102,7 @@ class KnowledgeService:
                                                    evidence, requester)
             return QueryResponse(
                 request_id=request_id, status=status, answer=answer,
-                sources=[Source(title=h.title, url=h.url, section=h.section, source_type=h.source_type,
-                                relevance=round(max(h.similarity, 0.0), 3), image_urls=h.image_urls)
-                         for h in cited],
+                sources=merge_sources(cited),
                 confidence=confidence, needs_human=status != "answered", escalation_id=escalation_id,
                 model=used_model, prompt_version=prompt_version,
                 latency_ms=int((time.perf_counter() - start) * 1000), cost_usd=round(cost, 6))
@@ -127,6 +125,23 @@ class KnowledgeService:
         return respond(draft.status, draft.answer, cited, draft.confidence,
                        "model reported insufficient evidence", result.record.cost_usd,
                        prompt_version, result.record.model)
+
+
+def merge_sources(cited: list[SearchHit]) -> list[Source]:
+    """One source per article URL: keep the best relevance and combine screenshot links."""
+    merged: dict[str, Source] = {}
+    for h in cited:
+        relevance = round(max(h.similarity, 0.0), 3)
+        s = merged.get(h.url)
+        if s is None:
+            merged[h.url] = Source(title=h.title, url=h.url, section=h.section, source_type=h.source_type,
+                                   relevance=relevance, image_urls=list(h.image_urls))
+            continue
+        s.relevance = max(s.relevance, relevance)
+        s.image_urls += [u for u in h.image_urls if u not in s.image_urls]
+        if s.source_type == "image" and h.source_type == "article":
+            s.source_type, s.section = "article", h.section
+    return list(merged.values())
 
 
 def build_service(settings: Settings | None = None, embedder: Embedder | None = None,

@@ -92,3 +92,7 @@
 - {id: K31, group: deleted, expect: insufficient_evidence, expected_articles: [], deactivate: ["5000614045"],
    question: "Can I host a WordPress blog on my Brilliant Directories hosting account?",
    key_facts: ["Must not cite the deactivated WordPress article"]}
+- {id: K32, group: direct, expect: answered, expected_articles: ["5000673830"],
+   question: "How do I connect Stripe to accept card payments?",
+   key_facts: ["Finance > Payment Settings", "Add New Payment Gateway, choose Stripe, enter account credentials"],
+   note: "Found in a live Groq smoke test: right article ranked 14th, so the bot abstained."}
