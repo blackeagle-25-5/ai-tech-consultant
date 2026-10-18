@@ -1,0 +1,457 @@
+# 50 development emails. Written for this project (AI-assisted, reviewed by the developer).
+# expected.category: how_to | troubleshooting | project_request | refund_cancellation | complaint | quote_request | follow_up | other
+# expected.risk: low | medium | high      expected.escalate: true when the help center is unlikely to hold the answer
+# must_not: commitments the reply must not make without a human.
+
+- id: D01
+  from_name: Priya Raman
+  from_email: priya@yogadirectory.co
+  subject: Changing the logo on my site
+  body: |
+    Hi team,
+    I just got a new logo from my designer. How do I replace the old logo on my directory website? Is there a recommended size?
+    Thanks, Priya
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: change website logo
+
+- id: D02
+  from_name: Marcus Bell
+  from_email: marcus@plumbersnearme.net
+  subject: Import members from spreadsheet
+  body: |
+    Hello, I have about 800 plumbers in an Excel file (name, company, phone, city). What is the way to import them as members in one go instead of adding them by hand? Which columns are required?
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: import members via CSV mandatory fields
+
+- id: D03
+  from_name: Elena Petrova
+  from_email: elena@weddingvendors.eu
+  subject: Mass email to all members
+  body: |
+    Hi! I want to send a newsletter to all my vendors about our summer event. Can I send a mass email campaign from inside Brilliant Directories, or do I need another tool?
+    Elena
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: mass email campaign
+
+- id: D04
+  from_name: Tom Okafor
+  from_email: tom@lawyerlist.org
+  subject: rename "Classifieds" post type
+  body: |
+    We use the Classifieds feature but our members call them "Job Board". How do I rename the post type and also change the URL from /classifieds to /jobs?
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: change name tab title URL of a post type
+
+- id: D05
+  from_name: Grace Liu
+  from_email: grace@petsitters.app
+  subject: Setting up Stripe
+  body: |
+    Hi, we are ready to start charging for memberships. How do I connect a payment gateway like Stripe so members can pay by card?
+    Best, Grace
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: payment settings setting up a payment gateway
+
+- id: D06
+  from_name: Daniel Kim
+  from_email: daniel@realtorhub.us
+  subject: webmail access
+  body: |
+    How can I check the email inbox for info@realtorhub.us? Someone told me there is webmail in the admin area but I can't find it.
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: access webmail through the admin area
+
+- id: D07
+  from_name: Sofia Martins
+  from_email: sofia@dentistsfinder.pt
+  subject: Social media links in footer
+  body: |
+    Hello, where do I add our Facebook and Instagram links so the icons show on the website?
+    Obrigada, Sofia
+  expected: {category: how_to, risk: low, urgency: low, escalate: false}
+  kb_hint: general settings social media tab
+
+- id: D08
+  from_name: Ahmed Hassan
+  from_email: ahmed@contractorsuae.com
+  subject: Custom CSS
+  body: |
+    I want to change the colour of the buttons on the member profile pages. Is there a place to add custom CSS without breaking updates?
+  expected: {category: how_to, risk: low, urgency: low, escalate: false}
+  kb_hint: override and edit default css stylesheets
+
+- id: D09
+  from_name: Rachel Green
+  from_email: rachel@tutorsdirectory.com
+  subject: Email forwarders
+  body: |
+    Can I set up support@tutorsdirectory.com so that it forwards to my Gmail? I don't need a full mailbox.
+  expected: {category: how_to, risk: low, urgency: low, escalate: false}
+  kb_hint: email forwarders
+
+- id: D10
+  from_name: Kenji Watanabe
+  from_email: kenji@sushimap.jp
+  subject: Sidebar widgets
+  body: |
+    Hello. How do I choose which sidebar appears on the search results page? I want a different sidebar than on the blog.
+  expected: {category: how_to, risk: low, urgency: low, escalate: false}
+  kb_hint: toolbox sidebar manager
+
+- id: D11
+  from_name: Laura Becker
+  from_email: laura@physiofinder.de
+  subject: Profile analytics for members
+  body: |
+    Our members ask how many people viewed their profile. Is there analytics they can see? Where do they find it?
+  expected: {category: how_to, risk: low, urgency: normal, escalate: false}
+  kb_hint: member profile analytics
+
+- id: D12
+  from_name: Victor Nguyen
+  from_email: victor@nailsalons.vn
+  subject: Predictive search
+  body: |
+    Is it possible to show keyword suggestions while visitors type in the search bar? Like Google autocomplete.
+  expected: {category: how_to, risk: low, urgency: low, escalate: false}
+  kb_hint: predictive keyword search
+
+- id: T01
+  from_name: Brian O'Neil
+  from_email: brian@golfcoaches.ie
+  subject: Search results show wrong members!!
+  body: |
+    When I search "Dublin" on my site the results show coaches from Cork first and some Dublin coaches don't appear at all. What's going on with the search?
+  expected: {category: troubleshooting, risk: medium, urgency: normal, escalate: false}
+  kb_hint: member search result issues; search result ordering distance sorting
+
+- id: T02
+  from_name: Hannah Schultz
+  from_email: hannah@yogastudios.at
+  subject: SSL not secure warning
+  body: |
+    Chrome shows "Not secure" on my website. I thought SSL was included? Visitors are scared off. Please help.
+  expected: {category: troubleshooting, risk: medium, urgency: high, escalate: false}
+  kb_hint: ssl https faq
+
+- id: T03
+  from_name: Carlos Mendez
+  from_email: carlos@mechanicsmx.com
+  subject: Payments failing
+  body: |
+    Since yesterday new members get an error when they try to pay with card on the signup page. We use Stripe. Nothing changed on our side. We are losing signups.
+  expected: {category: troubleshooting, risk: high, urgency: high, escalate: false}
+  kb_hint: payment gateway stripe errors
+  must_not: [promise a fix time]
+
+- id: T04
+  from_name: Julia Rossi
+  from_email: julia@weddingitaly.it
+  subject: changes not showing
+  body: |
+    I updated my homepage text an hour ago but the live site still shows the old text. I cleared my browser cache already.
+  expected: {category: troubleshooting, risk: low, urgency: normal, escalate: false}
+  kb_hint: refreshing live site cache
+
+- id: T05
+  from_name: Sam Patel
+  from_email: sam@accountantsuk.co.uk
+  subject: Import failed
+  body: |
+    I tried importing 300 members from CSV and the import stopped with an error about missing fields. Which fields are mandatory?
+  expected: {category: troubleshooting, risk: low, urgency: normal, escalate: false}
+  kb_hint: mandatory fields for member imports
+
+- id: T06
+  from_name: Olivia Brown
+  from_email: olivia@florists.com.au
+  subject: Contact form emails not arriving
+  body: |
+    Visitors fill the contact form on member profiles but my members say they never receive the emails. Where do these messages go?
+  expected: {category: troubleshooting, risk: medium, urgency: normal, escalate: false}
+  kb_hint: forms inbox
+
+- id: T07
+  from_name: Noah Wilson
+  from_email: noah@hvacpros.ca
+  subject: Members can't upgrade
+  body: |
+    A member tried to upgrade from Basic to Premium from their dashboard and said the button did nothing. How do upgrades work from the member's side?
+  expected: {category: troubleshooting, risk: medium, urgency: normal, escalate: false}
+  kb_hint: upgrades downgrades from members perspective
+
+- id: T08
+  from_name: Mia Johansson
+  from_email: mia@saunadirectory.se
+  subject: Google map not loading
+  body: |
+    The map on the search results page is grey with "For development purposes only" watermark. How do I fix this?
+  expected: {category: troubleshooting, risk: medium, urgency: normal, escalate: false}
+  kb_hint: google maps api key
+
+- id: T09
+  from_name: Lucas Silva
+  from_email: lucas@barbersbr.com.br
+  subject: Signup page broken on phone
+  body: |
+    On iPhone the signup form fields overlap and members can't click the submit button. On desktop it's fine. Our theme is the default one.
+  expected: {category: troubleshooting, risk: medium, urgency: high, escalate: true}
+  kb_hint: mobile signup form layout
+
+- id: T10
+  from_name: Emma Davis
+  from_email: emma@vetclinics.us
+  subject: Ticket status "Waiting on customer"?
+  body: |
+    My support ticket says "Waiting on customer" but I already replied. What do the statuses mean and is my ticket still being worked on?
+  expected: {category: troubleshooting, risk: low, urgency: normal, escalate: false}
+  kb_hint: what does each ticket status mean
+
+- id: P01
+  from_name: Isabella Garcia
+  from_email: isabella@eventplanners.es
+  subject: Booking feature
+  body: |
+    We want members (event planners) to accept bookings with a calendar and deposit payment directly on their profile. Can you build this for us? What would it involve?
+  expected: {category: project_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: P02
+  from_name: George Thompson
+  from_email: george@lawfirmsdirectory.com
+  subject: Migrate from WordPress
+  body: |
+    Our directory currently runs on WordPress with a plugin. We'd like you to migrate everything (1,200 listings, blog posts, users) to Brilliant Directories. Is that something your team does?
+  expected: {category: project_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: P03
+  from_name: Aisha Bello
+  from_email: aisha@africanchefs.ng
+  subject: Custom homepage design
+  body: |
+    I'd like a completely new homepage design matching our brand guide (attached in a later email). Video background, featured chefs carousel, and a newsletter signup. Can you do it?
+  expected: {category: project_request, risk: medium, urgency: low, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: P04
+  from_name: Henry Clark
+  from_email: henry@solarinstallers.com
+  subject: Lead matching between homeowners and installers
+  body: |
+    We want homeowners to submit a project request and have it automatically sent to the 3 nearest solar installers in our directory. Is this possible out of the box or does it need development?
+  expected: {category: project_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: P05
+  from_name: Chloe Martin
+  from_email: chloe@artistsguild.fr
+  subject: Integration with Mailchimp
+  body: |
+    Can you integrate our member list with Mailchimp so new members are added automatically to our audience?
+  expected: {category: project_request, risk: medium, urgency: low, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: P06
+  from_name: Raj Malhotra
+  from_email: raj@doctorsindia.in
+  subject: Multi-language site
+  body: |
+    Our visitors speak Hindi and English. We need the full directory in both languages with a switcher. Can you set this up?
+  expected: {category: project_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: R01
+  from_name: Patricia Lewis
+  from_email: patricia@quiltersclub.org
+  subject: Cancel my plan and refund
+  body: |
+    Please cancel my subscription today and refund the last payment of $79. I haven't used the site this month.
+  expected: {category: refund_cancellation, risk: high, urgency: normal, escalate: false}
+  must_not: [confirm a refund, confirm cancellation completed]
+
+- id: R02
+  from_name: Kevin Wright
+  from_email: kevin@dronepilots.io
+  subject: Charged twice
+  body: |
+    I was charged twice for my annual plan on the 3rd. Please refund the duplicate charge ASAP.
+  expected: {category: refund_cancellation, risk: high, urgency: high, escalate: false}
+  must_not: [confirm a refund]
+
+- id: R03
+  from_name: Nina Kowalski
+  from_email: nina@translatorspl.pl
+  subject: How do members cancel?
+  body: |
+    One of my members wants to cancel their paid listing. How can they cancel their own subscription, or do I have to do it from the admin?
+  expected: {category: refund_cancellation, risk: medium, urgency: normal, escalate: false}
+  kb_hint: how do I cancel payment subscriptions orders
+
+- id: R04
+  from_name: Omar Farouk
+  from_email: omar@carrentalsegypt.com
+  subject: Downgrade instead of cancel
+  body: |
+    I want to stay but on a cheaper plan. Can I downgrade my website plan and get the price difference back for the remaining months?
+  expected: {category: refund_cancellation, risk: high, urgency: normal, escalate: false}
+  must_not: [confirm a refund, quote a price]
+
+- id: R05
+  from_name: Lily Anderson
+  from_email: lily@bakersnetwork.com
+  subject: Refund for unused setup service
+  body: |
+    I paid for the setup service in March but nobody has started. I want my money back.
+  expected: {category: refund_cancellation, risk: high, urgency: normal, escalate: false}
+  must_not: [confirm a refund]
+
+- id: R06
+  from_name: Jack Turner
+  from_email: jack@surfschools.com.au
+  subject: Close account
+  body: |
+    We are shutting down the business. Please close the account and delete all member data. Do we get a refund for the remaining 5 months of the annual plan?
+  expected: {category: refund_cancellation, risk: high, urgency: normal, escalate: false}
+  must_not: [confirm a refund, confirm data deletion completed]
+
+- id: C01
+  from_name: Robert King
+  from_email: robert@roofersusa.com
+  subject: Your update broke my site
+  body: |
+    After your latest update my homepage layout is completely broken. Members are complaining and I'm losing money every hour. This is unacceptable. Fix it NOW.
+  expected: {category: complaint, risk: high, urgency: high, escalate: false}
+  must_not: [blame the customer, promise a fix time]
+
+- id: C02
+  from_name: Sarah Mitchell
+  from_email: sarah@therapistsnearby.com
+  subject: Third time asking
+  body: |
+    This is the third time I'm writing about the same SSL problem. Nobody has answered properly. I'm seriously thinking of leaving for another platform.
+  expected: {category: complaint, risk: high, urgency: high, escalate: false}
+  must_not: [promise a fix time]
+
+- id: C03
+  from_name: Paul Robinson
+  from_email: paul@legaladvisors.co.uk
+  subject: Formal complaint - data shown publicly
+  body: |
+    One of our members' private phone number is visible on their public profile even though they set it to hidden. This could be a GDPR breach. Our lawyer is copied. We need an explanation in writing.
+  expected: {category: complaint, risk: high, urgency: high, escalate: true}
+  must_not: [admit legal liability, promise compensation]
+
+- id: C04
+  from_name: Maria Lopez
+  from_email: maria@cleanersdirectory.mx
+  subject: Rude support agent
+  body: |
+    The agent on chat yesterday was dismissive and closed the chat on me. I expect better for what I pay.
+  expected: {category: complaint, risk: medium, urgency: normal, escalate: false}
+
+- id: C05
+  from_name: Steven Hall
+  from_email: steven@gymsdirectory.com
+  subject: Site is slow
+  body: |
+    My site takes 8 seconds to load. Competitors load in 2. You promised a fast platform. What are you going to do about it?
+  expected: {category: complaint, risk: medium, urgency: normal, escalate: true}
+  must_not: [promise a fix time]
+
+- id: C06
+  from_name: Angela Scott
+  from_email: angela@weddingphotographers.com
+  subject: Billing without warning
+  body: |
+    You charged my card for a renewal without any reminder email. I'm very unhappy about this. Why wasn't I notified?
+  expected: {category: complaint, risk: high, urgency: normal, escalate: true}
+  must_not: [confirm a refund]
+
+- id: Q01
+  from_name: Benjamin Young
+  from_email: ben@coworkingspaces.com
+  subject: Price for custom search filters
+  body: |
+    How much would it cost to add custom search filters (amenities, price range, opening hours) to our coworking directory?
+  expected: {category: quote_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price]
+
+- id: Q02
+  from_name: Zoe Adams
+  from_email: zoe@childcarefinder.com
+  subject: Quote for full setup
+  body: |
+    We're starting a childcare directory from scratch. Can you give me a quote for full setup: design, categories, membership plans and payment setup?
+  expected: {category: quote_request, risk: medium, urgency: normal, escalate: false}
+  must_not: [give a price]
+
+- id: Q03
+  from_name: Ethan Baker
+  from_email: ethan@musicteachers.net
+  subject: Hourly rate?
+  body: |
+    What is your hourly rate for small custom changes? I have a list of about 10 tweaks.
+  expected: {category: quote_request, risk: medium, urgency: low, escalate: false}
+  must_not: [give a price]
+
+- id: Q04
+  from_name: Fatima Zahra
+  from_email: fatima@henna-artists.ma
+  subject: Cost of mobile app
+  body: |
+    How much would a mobile app version of my directory cost, for iOS and Android?
+  expected: {category: quote_request, risk: medium, urgency: low, escalate: false}
+  must_not: [give a price]
+
+- id: Q05
+  from_name: William Harris
+  from_email: will@boatrentals.gr
+  subject: Plans comparison
+  body: |
+    Before I sign up: what is included in each website plan and what does each cost per month?
+  expected: {category: quote_request, risk: medium, urgency: normal, escalate: true}
+  must_not: [give a price not stated in the knowledge base]
+
+- id: F01
+  from_name: Priya Raman
+  from_email: priya@yogadirectory.co
+  subject: "Re: Changing the logo on my site"
+  body: |
+    Hi again, did you get my email from last week about the logo? I still haven't heard back.
+  expected: {category: follow_up, risk: medium, urgency: normal, escalate: false}
+
+- id: F02
+  from_name: Marcus Bell
+  from_email: marcus@plumbersnearme.net
+  subject: "Re: Import members from spreadsheet"
+  body: |
+    Thanks for the instructions. The import worked for 750 members but 50 were skipped. Is there a log that shows why?
+  expected: {category: follow_up, risk: low, urgency: normal, escalate: true}
+
+- id: F03
+  from_name: Isabella Garcia
+  from_email: isabella@eventplanners.es
+  subject: "Re: Booking feature"
+  body: |
+    Any update on the booking feature proposal? We have a board meeting on Friday and need numbers.
+  expected: {category: follow_up, risk: medium, urgency: high, escalate: false}
+  must_not: [give a price, give a delivery date]
+
+- id: F04
+  from_name: Kevin Wright
+  from_email: kevin@dronepilots.io
+  subject: "Re: Charged twice"
+  body: |
+    It's been 5 days. Has the duplicate charge been refunded yet?
+  expected: {category: follow_up, risk: high, urgency: high, escalate: false}
+  must_not: [confirm a refund]
+
+- id: F05
+  from_name: Hannah Schultz
+  from_email: hannah@yogastudios.at
+  subject: "Re: SSL not secure warning"
+  body: |
+    Thanks, the padlock shows now on the homepage but some inner pages still show "Not secure". Any idea?
+  expected: {category: follow_up, risk: medium, urgency: normal, escalate: false}
+  kb_hint: ssl https mixed content

@@ -54,7 +54,11 @@ class PromptRegistry:
         (self.dir / name / "active.txt").write_text(version, encoding="utf-8")
 
     def add_version(self, name: str, system: str, notes: str) -> str:
+        """Save a new version WITHOUT activating it (the current version is pinned first)."""
         existing = self.versions(name)
+        pointer = self.dir / name / "active.txt"
+        if existing and not pointer.exists():
+            pointer.write_text(self.active_version(name), encoding="utf-8")
         version = f"v{len(existing) + 1}"
         path = self.dir / name / f"{version}.yaml"
         path.parent.mkdir(parents=True, exist_ok=True)

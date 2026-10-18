@@ -3,14 +3,13 @@ from __future__ import annotations
 import hashlib
 import re
 from pathlib import Path
-from types import SimpleNamespace
-from typing import Callable
 
 import numpy as np
 import pytest
 
 import common.llm
 from common.llm import LLM
+from common.testing import FakeAnthropic
 from task1_knowledge_brain.app import escalations
 from task1_knowledge_brain.config import Settings
 from task1_knowledge_brain.db import connect
@@ -38,23 +37,6 @@ class FakeEmbedder:
 
     def embed_query(self, text: str) -> np.ndarray:
         return self._vec(text)
-
-
-class FakeAnthropic:
-    """Stands in for anthropic.Anthropic. `responder(kwargs)` returns the parsed object."""
-
-    def __init__(self, responder: Callable[[dict], object]) -> None:
-        self.calls: list[dict] = []
-        self.responder = responder
-        self.messages = SimpleNamespace(parse=self._parse)
-
-    def _parse(self, **kwargs):
-        self.calls.append(kwargs)
-        parsed = self.responder(kwargs)
-        if isinstance(parsed, Exception):
-            raise parsed
-        return SimpleNamespace(parsed_output=parsed, stop_reason="end_turn",
-                               usage=SimpleNamespace(input_tokens=1000, output_tokens=200))
 
 
 @pytest.fixture(autouse=True)
