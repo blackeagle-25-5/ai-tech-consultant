@@ -1,0 +1,37 @@
+PLACEHOLDER - AI-written transcript for pipeline testing only. Replace with the real recorded role-play (see role_play_scripts.md).
+[00:00:02] Consultant: Hi Raj, thanks for joining. Is it okay if I record this call for my notes?
+[00:00:06] Client: No problem.
+[00:00:08] Consultant: So, HomeFix Pros. Tell me what you'd like to change.
+[00:00:12] Client: Right. We're a directory of home repair contractors, plumbers, electricians, roofers. About three hundred contractors pay us a monthly membership.
+[00:00:22] Client: Now we want to sell something extra. A featured job post. A contractor pays once, like a one-off fee, and their job post is highlighted for thirty days.
+[00:00:33] Consultant: So a one-time purchase on top of the membership. Is the job post already a feature on the site?
+[00:00:38] Client: Yes, contractors can post jobs, but there's no paid highlight.
+[00:00:42] Consultant: Okay. What else?
+[00:00:44] Client: Checkout. It's confusing. People don't know what they're paying for. I want a coupon code field and a clear order summary page before they pay.
+[00:00:54] Consultant: Coupon codes and an order summary step. Do you run promotions often?
+[00:00:58] Client: Yes, every spring we do a discount for new contractors.
+[00:01:02] Consultant: Okay. Notifications?
+[00:01:04] Client: Yes. When a payment succeeds or fails, both me as admin and the contractor should get an email. SMS would be nice too, but not essential.
+[00:01:14] Consultant: So email notifications for payment success and failure to admin and contractor, and SMS as optional. For SMS we'd need a provider like Twilio, and you'd pay them for messages. Is that okay?
+[00:01:24] Client: Probably. Let's keep it optional.
+[00:01:27] Consultant: Okay. And payments, what do you use today?
+[00:01:30] Client: PayPal. But our accountant wants us on Stripe because the fees and reporting are better. Can we run both? Some contractors like PayPal.
+[00:01:40] Consultant: I need to check whether the platform supports two gateways at the same time. If not, we'd have to choose one. Do you already have a Stripe account?
+[00:01:48] Client: Not yet. Our accountant, Linda, will open it.
+[00:01:52] Consultant: Okay, so the Stripe account is a dependency on your side. We can't connect it until Linda sets it up.
+[00:01:58] Client: Understood.
+[00:02:00] Client: Another thing. We use QuickBooks. I want every invoice from the site to go into QuickBooks automatically. Right now Linda types them in by hand.
+[00:02:10] Consultant: That's an integration with an external system. We'd need QuickBooks access, and it may need a connector service like Zapier or custom work. I'll check what's possible.
+[00:02:20] Client: Okay. And failed renewals. When a contractor's card fails, we lose them. Can the system retry automatically, and send a reminder before the card expires?
+[00:02:31] Consultant: Good point. Automatic payment retry and card-expiry reminder emails. I'll check what the platform does out of the box.
+[00:02:38] Client: Great.
+[00:02:40] Consultant: Timeline?
+[00:02:42] Client: End of next quarter. So end of March.
+[00:02:45] Consultant: And budget?
+[00:02:47] Client: I don't really know. Tell me what it costs and I'll see.
+[00:02:51] Consultant: Okay, I'll give you a breakdown with optional items separate. Who signs off?
+[00:02:56] Client: Me. But Linda needs to agree on anything about payments and invoices.
+[00:03:01] Consultant: Understood. Anything you definitely don't want us to touch?
+[00:03:05] Client: Don't change the design. People are used to it.
+[00:03:08] Consultant: Okay, no design changes, I'll list that as an exclusion. I'll send you a proposal next week.
+[00:03:13] Client: Perfect, thanks.

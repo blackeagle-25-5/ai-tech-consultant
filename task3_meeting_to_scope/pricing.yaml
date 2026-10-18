@@ -1,0 +1,5 @@
+# Pricing assumptions used to turn hours into a draft price. Change freely; nothing here is a binding quote.
+hourly_rate: 40
+currency: USD
+tax_rate: 0.0        # e.g. 0.18 for 18% GST
+contingency_pct: 10  # added on top of the expected hours

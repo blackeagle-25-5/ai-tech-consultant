@@ -1,0 +1,37 @@
+PLACEHOLDER - AI-written transcript for pipeline testing only. Replace with the real recorded role-play (see role_play_scripts.md).
+[00:00:03] Consultant: Hi Maya, good to see you again. Same as last time, okay to record?
+[00:00:07] Client: Yes, fine.
+[00:00:09] Consultant: Thanks. You've seen the proposal. Tom too?
+[00:00:13] Client: Yes, we went through it together. Mostly good. But a few things changed on our side.
+[00:00:19] Consultant: Sure, let's go through them one by one.
+[00:00:22] Client: First, the Instagram feed. Forget it. We asked the trainers and most of them don't keep Instagram updated, it would look dead.
+[00:00:31] Consultant: Okay, so we remove the Instagram feed from scope completely.
+[00:00:35] Client: Yes, remove it.
+[00:00:37] Consultant: Next?
+[00:00:38] Client: The filters. We got some complaints on social media about the gender filter, people said it was discriminatory against trainers. So please drop the gender filter.
+[00:00:48] Consultant: Understood, no gender filter.
+[00:00:50] Client: But add a filter for languages spoken. We have a lot of trainers who speak Spanish, Polish, Arabic, and clients really ask for that.
+[00:00:59] Consultant: So the filters become specialty, price range, session type online or in person, and languages spoken.
+[00:01:06] Client: Exactly.
+[00:01:07] Consultant: Do trainers already list their languages?
+[00:01:10] Client: No, that's a new field too.
+[00:01:12] Consultant: Okay, same as price, a new profile field the trainers fill in.
+[00:01:16] Client: Then the big one. We want a "book a free intro session" button on each trainer profile. The visitor picks a preferred day and time, and the trainer gets an email with the request.
+[00:01:28] Consultant: Does the trainer need to confirm inside the website, or just reply by email?
+[00:01:32] Client: Just by email is fine for now. We don't need a calendar.
+[00:01:36] Consultant: Okay. That's a new item that wasn't in the agreed scope, so I'll quote it separately. Does it need to be in the January launch?
+[00:01:43] Client: Yes, ideally. Speaking of which, the campaign moved. The launch is now end of January, January thirty first.
+[00:01:51] Consultant: Okay, so the deadline moves from December fifteenth to January thirty first.
+[00:01:56] Client: Yes. The ads company had a delay.
+[00:01:59] Consultant: That gives us more room actually. Does the budget stay around five thousand?
+[00:02:04] Client: We can go to six if the booking button needs it. Does the booking button change the price much?
+[00:02:10] Consultant: I'll estimate it properly, but it's a small to medium piece. I'll show it as a separate line so you and Tom can decide.
+[00:02:17] Client: Perfect. Oh and, can you also write the blog posts for the launch? Like five articles about finding a trainer.
+[00:02:24] Consultant: Content writing wasn't part of what we discussed, and it's not something in the current scope. I can flag it as an out-of-scope request and quote it separately, or recommend a writer. What do you prefer?
+[00:02:34] Client: Quote it separately then, we'll see.
+[00:02:37] Consultant: Okay. And everything else stays? Distance ordering, AI search as an optional item, mobile improvements for signup, results and profile, featured trainers on top?
+[00:02:47] Client: Yes, all of that stays. The AI search, still optional.
+[00:02:51] Consultant: And the price ranges for the filter, did you decide?
+[00:02:55] Client: Yes. Under 40, 40 to 70, and over 70 dollars per session.
+[00:03:00] Consultant: Great, that closes that open question. I'll send a revised scope and a change summary.
+[00:03:05] Client: Thanks!

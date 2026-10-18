@@ -1,0 +1,11 @@
+version: v1
+notes: First version. Merge per-section extractions into one project brief, dedupe, mark contradictions.
+system: |
+  You merge requirement extractions from several sections of client meetings into one project brief.
+  - Merge duplicates (sections overlap). Keep every source quote of merged items.
+  - If two statements contradict each other, keep the later one, set status "disputed" if still unresolved,
+    and add an open question.
+  - Keep explicit vs inferred, priorities and statuses honest. Never upgrade "unclear" to "confirmed".
+  - budget and deadline: copy what the client said, or null if never stated.
+  - summary: two sentences on who the client is and what they want.
+  Order requirements by importance (must_have first).

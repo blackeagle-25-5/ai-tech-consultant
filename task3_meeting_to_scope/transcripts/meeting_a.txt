@@ -1,0 +1,75 @@
+PLACEHOLDER - AI-written transcript for pipeline testing only. Replace with the real recorded role-play (see role_play_scripts.md).
+[00:00:04] Consultant: Hi Maya, thanks for making time. Before we start, are you okay if I record this so I can write up the scope properly?
+[00:00:10] Client: Yes, sure, go ahead.
+[00:00:13] Consultant: Great. So tell me a bit about FitFinder and what made you reach out.
+[00:00:19] Client: So FitFinder is a directory of personal trainers. We have, I think, around six hundred trainers now, in about forty cities. It's built on Brilliant Directories, someone set it up for us two years ago.
+[00:00:33] Client: And the main problem, honestly, the search isn't great. People write to us saying they can't find the right trainer.
+[00:00:41] Consultant: Okay. When you say the search isn't great, what exactly happens? Do they get no results, wrong results, too many?
+[00:00:48] Client: Too many, mostly. You type "London" and you get like a hundred and twenty trainers and no way to narrow it down. And sometimes the order is weird, trainers who are far away show up first.
+[00:01:02] Consultant: Got it. So two things: narrowing down, and ordering by distance.
+[00:01:06] Client: Yes. We want filters. Like, proper filters.
+[00:01:09] Consultant: Which filters would matter most to your visitors?
+[00:01:13] Client: Hmm. Specialty, for sure. Like yoga, strength training, rehab after injury, that kind of thing. Price range. Whether they do online sessions or in person. And gender of the trainer, a lot of women ask for a female trainer.
+[00:01:29] Consultant: Okay, so specialty, price range, online versus in-person, and trainer gender. Do trainers already enter that information in their profiles?
+[00:01:37] Client: Some of it. Specialty is a category already. Price, I don't think we collect that. Online or in person, no.
+[00:01:45] Consultant: So we may need new profile fields, and trainers would need to fill them in. Who would do that, you or the trainers?
+[00:01:52] Client: The trainers, I guess. We could email them. Maybe we make it required when they update their profile.
+[00:01:59] Consultant: Okay, I'll note that as a client responsibility, getting trainers to complete the new fields.
+[00:02:05] Client: And then, I was reading about this, maybe we add some AI to the search? Everyone is doing AI now.
+[00:02:12] Consultant: Sure. What would AI search do for your visitors, in your mind?
+[00:02:16] Client: I don't know exactly. Maybe you type "I hurt my knee and want to get back to running" and it finds a rehab trainer near you?
+[00:02:25] Consultant: That's a good example. So natural language search that maps a description to the right specialty. That's probably a custom piece of work. I'd like to keep it as a separate optional item so we can price it on its own. Is that okay?
+[00:02:36] Client: Yes, makes sense. It's a nice to have. The filters are the must-have.
+[00:02:41] Consultant: Okay. What else is on your list?
+[00:02:44] Client: Mobile. The site looks bad on phones. Especially the signup form for trainers, the fields are tiny, people give up.
+[00:02:52] Consultant: Is it the whole site or mainly the signup form?
+[00:02:55] Client: Mainly signup, and the search results page is a bit cramped on phones too. The homepage is fine.
+[00:03:02] Consultant: Okay, so mobile improvements for the signup form and the search results page. Do you have numbers on how many people abandon signup?
+[00:03:09] Client: Not really. I just hear it from trainers. Maybe I can check Google Analytics.
+[00:03:14] Consultant: That would help to measure success later. Can you send me access or a screenshot?
+[00:03:18] Client: Yes, I'll send you a screenshot this week.
+[00:03:21] Consultant: Thanks. Next item?
+[00:03:23] Client: Instagram. Trainers want their Instagram feed on their profile. Like, the latest photos.
+[00:03:29] Consultant: Okay, an Instagram feed embed on each trainer profile. Do all trainers have public Instagram accounts?
+[00:03:35] Client: Most of them, yes.
+[00:03:37] Consultant: Noted. I'll check whether the platform supports that already or whether it's custom.
+[00:03:42] Client: And one more, featured trainers. Trainers who pay extra should appear at the top of search results.
+[00:03:49] Consultant: Do you already sell a featured or premium plan?
+[00:03:52] Client: We have a premium membership, but it doesn't change the order right now. At least I don't think so.
+[00:03:58] Consultant: Okay. I believe the platform has some options for ordering results by membership level, I'll verify that. That could be a setting rather than development.
+[00:04:06] Client: Oh that would be great, cheaper.
+[00:04:09] Consultant: Exactly. So far I have: filters, distance ordering, AI search as optional, mobile signup and results page, Instagram feed, featured trainers on top. Anything I missed?
+[00:04:20] Client: A mobile app? Do we need one? A friend said we should have an app.
+[00:04:25] Consultant: What would the app do that the website doesn't?
+[00:04:28] Client: I'm not sure. Let me think about it. Don't put it in for now.
+[00:04:32] Consultant: Okay, I'll list the mobile app as excluded from this scope, and we can revisit later.
+[00:04:37] Client: Yes.
+[00:04:39] Consultant: Let's talk about timing. When do you need this live?
+[00:04:43] Client: We have a big new year campaign. We need it before that. Mid-December, let's say December fifteenth.
+[00:04:51] Consultant: December fifteenth for launch. Is that a hard date?
+[00:04:54] Client: Pretty hard. The ads are booked for January first.
+[00:04:58] Consultant: Okay. And budget? Do you have a range in mind?
+[00:05:02] Client: Around five thousand dollars. Maybe a bit more if it's really worth it.
+[00:05:07] Consultant: Okay, roughly five thousand US dollars, with some flexibility. Who approves the final proposal?
+[00:05:13] Client: Me and my business partner, Tom. Tom needs to see the numbers.
+[00:05:18] Consultant: Understood. And how will you know this project was a success? What would you measure?
+[00:05:23] Client: Fewer complaints that people can't find a trainer. And more trainer signups from mobile.
+[00:05:29] Consultant: Good. For filters I'd suggest the acceptance criterion is: a visitor can filter search results by specialty, price range and session type and see only matching trainers. Does that sound right?
+[00:05:39] Client: And gender, yes.
+[00:05:41] Consultant: And gender, right. For distance: results are sorted nearest first when a location is entered.
+[00:05:47] Client: Yes.
+[00:05:48] Consultant: One question on price range. Do trainers charge per session, per month, packages?
+[00:05:54] Client: It's all over the place. Mostly per session. Let's just do per session price.
+[00:05:59] Consultant: Okay, price per session, entered by the trainer. And price ranges, like under 30, 30 to 60, over 60?
+[00:06:05] Client: I'd have to check our market. Can I get back to you on the exact ranges?
+[00:06:09] Consultant: Of course, I'll list that as an open question.
+[00:06:12] Client: Also, the trainers' profile pages, could we make the contact button bigger? That's small.
+[00:06:17] Consultant: Is that part of the mobile work, or everywhere?
+[00:06:20] Client: Mostly mobile, I guess.
+[00:06:22] Consultant: I'll include it in the mobile improvements for the profile page then. That adds the profile page to mobile scope: signup, results and profile.
+[00:06:30] Client: Okay. Oh and, we don't have anyone technical. So you'd need to do everything, including testing.
+[00:06:36] Consultant: Understood. We'll include testing and a short handover guide for you and Tom. Who has admin access to the site today?
+[00:06:43] Client: I do. I can give you a login.
+[00:06:46] Consultant: Great, please create a separate admin account for us. I'll send the proposal with a breakdown. Anything else before we wrap up?
+[00:06:53] Client: No, I think that's it. Thanks!
+[00:06:56] Consultant: Thanks Maya. I'll send a summary and the proposal by the end of the week.

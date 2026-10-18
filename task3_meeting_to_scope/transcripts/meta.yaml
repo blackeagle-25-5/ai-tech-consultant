@@ -1,0 +1,25 @@
+# Meeting metadata. Replace dates when the real recordings are made.
+# placeholder: true means the transcript is AI-written for pipeline testing, NOT a real recorded meeting.
+projects:
+  fitfinder:
+    client: FitFinder (personal trainer directory)
+    meetings:
+      - id: meeting_a
+        file: meeting_a.txt
+        date: "2026-10-19"
+        kind: initial
+        placeholder: true
+      - id: meeting_c
+        file: meeting_c.txt
+        date: "2026-10-21"
+        kind: follow_up
+        parent: meeting_a
+        placeholder: true
+  homefix:
+    client: HomeFix Pros (home-repair contractor directory)
+    meetings:
+      - id: meeting_b
+        file: meeting_b.txt
+        date: "2026-10-20"
+        kind: initial
+        placeholder: true
