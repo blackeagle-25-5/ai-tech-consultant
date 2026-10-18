@@ -70,7 +70,7 @@ answer: if the service is down it raises `KnowledgeUnavailable`, and both tasks 
 - **Polite, resumable crawl.** The sitemap (1,699 URLs, 1,540 articles) is diffed against a SQLite manifest:
   new, changed (by `lastmod`), failed (retry), removed (deactivate). It uses 2 concurrent requests and a 1 s gap,
   respects robots.txt, retries timeouts, 429s and 5xx errors with exponential backoff, and never retries a 403. Each page commits on its own,
-  so a crash loses nothing and a re-run continues. Measured full-crawl time: see EVALS.md.
+  so a crash loses nothing and a re-run continues. A full crawl took 30.5 minutes including local embedding (EVALS.md).
 - **Parsing.** Only `article.article-body` is used. Headings, numbered steps and tables are kept, and every screenshot
   keeps its position plus the sentence before it (usually the instruction it illustrates). Tracking pixels and banners are dropped.
 - **Screenshots.** Claude Haiku 5.5 describes each screenshot as JSON: description, exact UI labels, steps, and an
@@ -148,7 +148,7 @@ Claude Haiku 5.5 ($0.10/$0.50 per M tokens) and Claude Sonnet 5.5 ($2/$10) were 
 
 - **TypeScript for Task 2**: the developer is a beginner in TypeScript, and the brief allows Python. Mixing languages within one task is avoided.
 - **Real email sending/IMAP**: risk of sending unreviewed mail; simulated outbox instead, as the guide permits.
-- **Dedicated vector DB / reranker model**: SQLite + numpy is fast enough at this size; hybrid search already gives MRR 0.92.
+- **Dedicated vector DB / reranker model**: SQLite + numpy is fast enough at this size; hybrid search already gives MRR 0.90.
 - **Knowledge graph**: help-center structure (category → folder → article) is kept as metadata, and no measured need appeared for more.
 - **Calendar booking, SMS, real CRM integrations**: outside the three workflows.
 - **Fine-tuning**: versioned prompts + examples give a measurable, reversible improvement loop at far lower cost.

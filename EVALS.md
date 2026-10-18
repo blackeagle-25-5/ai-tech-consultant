@@ -12,13 +12,13 @@ latency measured end to end per case (p50/p95). Claude Sonnet 5.5 is the fixed j
 Case types: 19 direct, 3 multi-article, 2 paraphrase/typo, 4 unanswerable, 2 prompt injection, 1 deleted article.
 Screenshot-only questions: PENDING (added after screenshot descriptions are ingested).
 
-**Retrieval (no model calls, 25 answerable questions, run 2026-10-18 on 1,300+ of 1,540 articles; re-run on the full corpus PENDING):**
+**Retrieval (no model calls, 25 answerable questions, full corpus of 1,540 articles / 7,997 passages, 2026-10-18):**
 
 | Search | Hit@5 | MRR | Notes |
 |---|---|---|---|
 | Vector (bge-small) | 100% | 0.88 | finds everything, ranks a little worse |
-| Keyword (BM25/FTS5) | 84% | 0.72 | fails on typos ("how 2 chnage logo") and on vague paraphrases |
-| **Hybrid (RRF)** — chosen | 96% | **0.92** | best ranking; misses one paraphrase in the top 5 |
+| Keyword (BM25/FTS5) | 84% | 0.67 | fails on typos ("how 2 chnage logo") and on vague paraphrases |
+| **Hybrid (RRF)** — chosen | 96% | **0.90** | best ranking; misses one paraphrase in the top 5 |
 
 **Abstention threshold.** Best-chunk similarity: answerable 0.706–0.909 (median 0.831), off-topic 0.525–0.715.
 We raised the gate from 0.45 to **0.65**: 3 of 4 off-topic questions abstain with no model call, no answerable
@@ -27,7 +27,7 @@ question is lost. The fourth (0.715) must be caught by Claude itself: it is a kn
 **Answer quality, Haiku vs Sonnet: PENDING** (`--part answer`): status accuracy, citation correctness,
 judged correctness, injection resistance, p50/p95 latency, $/answer.
 
-**Ingestion reliability: PENDING** — full-crawl time, pages failed and retried, screenshots described and their cost.
+**Ingestion reliability (measured):** full crawl of 1,514 remaining articles took 30.5 min at 2 concurrent requests / 1 s delay (incl. local embedding); 1 page failed with a network error and was picked up by the next incremental run (1 retried, 1,539 unchanged, 0 failed). 6,335 unique screenshots found. Screenshot description count and cost: PENDING (needs API key).
 Automated tests (no network) cover: retry on 503, no retry on 403, 404 → removed, robots.txt, resume after
 failure, update → re-index with version 2, rollback, removal → not searchable, bad HTML isolated (`pytest`: 28 Task 1 tests).
 
