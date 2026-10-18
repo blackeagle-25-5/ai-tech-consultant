@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import os
 from concurrent.futures import ThreadPoolExecutor
 
 from common.kb_client import KnowledgeClient, KnowledgeUnavailable
-from common.llm import LLM
+from common.llm import LLM, LLMError
 from task3_meeting_to_scope.agents.base import call
 from task3_meeting_to_scope.schemas import FeasibilityJudgement, FeasibilityResult, Requirement
 
@@ -27,7 +28,12 @@ def check(llm: LLM, kb: KnowledgeClient, req: Requirement, model: str) -> tuple[
     user = (f"<requirement id=\"{req.id}\">\n{req.title}: {req.description}\n</requirement>\n"
             f"<help_center status=\"{answer.status}\" confidence=\"{answer.confidence}\">\n{answer.answer}\n"
             + "\n".join(f"Source: {s['title']} - {s['url']}" for s in sources) + "\n</help_center>")
-    res = call(llm, "feasibility", FeasibilityJudgement, user, model)
+    try:
+        res = call(llm, "feasibility", FeasibilityJudgement, user, model)
+    except LLMError as exc:  # one failed check must not stop the whole proposal
+        return FeasibilityResult(req_id=req.id, classification="needs_clarification",
+                                 explanation=f"Automatic check failed ({str(exc)[:120]}); check manually.",
+                                 kb_status=answer.status, kb_question=question, sources=sources), answer.cost_usd
     j = res.value
     classification = j.classification
     # Missing evidence is not proof of absence: only the evidence can justify "existing", and only an
@@ -42,7 +48,7 @@ def check(llm: LLM, kb: KnowledgeClient, req: Requirement, model: str) -> tuple[
 
 
 def check_all(llm: LLM, kb: KnowledgeClient, reqs: list[Requirement], model: str,
-              workers: int = 4) -> tuple[list[FeasibilityResult], float]:
+              workers: int = int(os.getenv("SCOPE_FEASIBILITY_WORKERS", "2"))) -> tuple[list[FeasibilityResult], float]:
     with ThreadPoolExecutor(max_workers=workers) as pool:
         results = list(pool.map(lambda r: check(llm, kb, r, model), reqs))
     return [r for r, _ in results], sum(c for _, c in results)

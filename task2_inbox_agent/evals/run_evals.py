@@ -18,7 +18,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
+from common.evals import EvalRow, QuotaGuard, print_summary, save_summary, summarize, write_rows
 from common.kb_client import KnowledgeClient
 from common.llm import HAIKU, LLM, SONNET, model_label
 from task2_inbox_agent.agent import InboxAgent
@@ -61,7 +61,11 @@ def eval_classification(items: list[LabelledEmail], model_key: str, split: str,
                         version: str | None = None) -> list[EvalRow]:
     agent, _ = new_agent(MODELS[model_key])
     rows = []
+    guard = QuotaGuard()
     for item in items:
+        if rows and guard.check(rows[-1].failure_reason):
+            print(f"Stopping {model_key}: Groq quota exhausted (3 in a row). Partial results are kept.")
+            break
         start = time.perf_counter()
         try:
             res, _ = agent.classify(item.email, version=version)
@@ -91,7 +95,11 @@ def eval_drafts(items: list[LabelledEmail], model_key: str) -> list[EvalRow]:
     agent, _ = new_agent(MODELS[model_key])
     judge = LLM()
     rows = []
+    guard = QuotaGuard()
     for item in items:
+        if rows and guard.check(rows[-1].failure_reason):
+            print(f"Stopping {model_key}: Groq quota exhausted (3 in a row). Partial results are kept.")
+            break
         start = time.perf_counter()
         result = agent.process(item.email)
         latency = int((time.perf_counter() - start) * 1000)

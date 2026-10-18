@@ -177,3 +177,41 @@ def test_combine_reruns_replaces_only_infrastructure_failures():
     base = [row("A", False, "GroqError: getaddrinfo failed"), row("B", False, "category how_to != complaint"), row("C", True)]
     out, n = combine_reruns(base, [row("A", True), row("B", True)])
     assert n == 1 and [r.passed for r in out] == [True, False, True]  # genuine failure B is kept
+
+
+def test_quota_exhaustion_blocks_further_requests_until_retry_after():
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        return httpx.Response(429, headers={"retry-after": "900"}, json={"error": "tokens per day"})
+
+    from common.groq_client import GroqQuotaExhausted
+    a = GroqAnthropicAdapter(api_key="t", sleep=lambda s: None, transport=httpx.MockTransport(handler))
+    with pytest.raises(GroqQuotaExhausted):
+        a._post({"model": "m"})
+    with pytest.raises(GroqQuotaExhausted, match="no request sent"):
+        a._post({"model": "m"})
+    assert calls["n"] == 1
+
+
+def test_quota_guard_stops_after_three_in_a_row():
+    from common.evals import QuotaGuard
+
+    g = QuotaGuard()
+    assert not g.check("GroqQuotaExhausted: quota exhausted") and not g.check("category wrong")
+    assert [g.check("quota exhausted") for _ in range(3)] == [False, False, True]
+
+
+def test_short_rate_limits_keep_retrying_until_the_time_budget():
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        if calls["n"] < 9:
+            return httpx.Response(429, headers={"retry-after": "30"}, json={"error": "tpm"})
+        return ok({"status": "ok", "hours": 1, "tags": [], "note": None})
+
+    a = GroqAnthropicAdapter(api_key="t", sleep=lambda s: None, transport=httpx.MockTransport(handler))
+    assert a._post({"model": "m"})["choices"]  # 8 x 30 s = 240 s < 300 s budget: must not give up after 6
+    assert calls["n"] == 9

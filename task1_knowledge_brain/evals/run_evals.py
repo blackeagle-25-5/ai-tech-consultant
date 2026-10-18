@@ -20,7 +20,7 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, Field
 
-from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
+from common.evals import EvalRow, QuotaGuard, print_summary, save_summary, summarize, write_rows
 from common.llm import HAIKU, LLM, SONNET, model_label
 from task1_knowledge_brain.config import get_settings
 from task1_knowledge_brain.service import build_service
@@ -82,7 +82,11 @@ def retrieval_eval(service) -> list[EvalRow]:
 def answer_eval(service, model_key: str) -> list[EvalRow]:
     judge = LLM()
     rows = []
+    guard = QuotaGuard()
     for c in CASES:
+        if rows and guard.check(rows[-1].failure_reason):
+            print(f"Stopping {model_key}: Groq quota exhausted (3 in a row). Partial results are kept.")
+            break
         for aid in c.get("deactivate", []):
             service.index.set_article_active(aid, False)
         try:

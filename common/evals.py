@@ -90,7 +90,20 @@ def print_summary(title: str, summary: dict) -> None:
             print(f"    {g}: {gs['pass_rate']:.0%} of {gs['cases']}")
 
 
-INFRA_ERROR_MARKERS = ("getaddrinfo failed", "network error", "rate limit", "did not succeed", "Failed to validate JSON")
+INFRA_ERROR_MARKERS = ("getaddrinfo failed", "network error", "rate limit", "did not succeed", "Failed to validate JSON",
+                       "quota exhausted")
+
+
+class QuotaGuard:
+    """Stops an eval loop after `limit` consecutive quota failures, so a run never fills up with fake failures."""
+
+    def __init__(self, limit: int = 3) -> None:
+        self.limit, self.streak = limit, 0
+
+    def check(self, failure_reason: str) -> bool:
+        """Record one case; return True if the run should stop."""
+        self.streak = self.streak + 1 if "quota exhausted" in failure_reason.lower() else 0
+        return self.streak >= self.limit
 
 
 def read_rows(path: Path) -> list[EvalRow]:

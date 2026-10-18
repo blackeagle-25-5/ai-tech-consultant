@@ -28,6 +28,10 @@ class GroqError(RuntimeError):
     pass
 
 
+class GroqQuotaExhausted(GroqError):
+    """Groq asked us to wait longer than we are willing to (free-tier daily/rolling token budget)."""
+
+
 def strict_schema(schema: dict) -> dict:
     """Make a Pydantic JSON schema acceptable to Groq strict mode: every object lists all properties as
     required and sets additionalProperties false; validation-only keywords are removed (Pydantic still
@@ -74,17 +78,22 @@ class GroqAnthropicAdapter:
         self.http = httpx.Client(headers={"Authorization": f"Bearer {key}"}, timeout=timeout_s, transport=transport)
         self.sleep = sleep
         self.messages = SimpleNamespace(parse=self._parse)
+        self.blocked_until: dict[str, float] = {}  # model -> time when Groq allows requests again
 
     def _post(self, payload: dict) -> dict | None:
         """Return the response JSON, or None when Groq rejected the generated JSON (caller retries)."""
+        model = payload.get("model", "")
+        if time.time() < self.blocked_until.get(model, 0):
+            raise GroqQuotaExhausted(f"Groq quota exhausted for {model}; retry after "
+                                     f"{self.blocked_until[model] - time.time():.0f}s (no request sent).")
         waited = 0.0
         last = ""
-        for attempt in range(6):
+        for attempt in range(30):  # bounded by MAX_RATE_LIMIT_WAIT_S below, not by the attempt count
             try:
                 r = self.http.post(GROQ_URL, json=payload)
             except httpx.HTTPError as exc:
                 last = f"network error: {exc}"
-                if attempt == 5:
+                if attempt >= 5:
                     break
                 self.sleep(2 ** attempt)
                 continue
@@ -93,9 +102,13 @@ class GroqAnthropicAdapter:
             if r.status_code == 400 and ("json_validate_failed" in r.text or "Failed to validate JSON" in r.text):
                 return None  # the model produced invalid JSON for the schema: retryable per Groq docs
             if r.status_code == 429 or r.status_code >= 500:
-                wait = float(r.headers.get("retry-after", 2 ** attempt))
+                wait = float(r.headers.get("retry-after", min(2 ** attempt, 30)))
                 last = f"HTTP {r.status_code}, retry-after {wait:.0f}s"
                 if waited + wait > MAX_RATE_LIMIT_WAIT_S:
+                    if r.status_code == 429:
+                        self.blocked_until[model] = time.time() + wait
+                        raise GroqQuotaExhausted(f"Groq quota exhausted for {model} (HTTP 429, retry-after "
+                                                 f"{wait:.0f}s). Free-tier token budget; try again later.")
                     break
                 waited += wait
                 self.sleep(wait)

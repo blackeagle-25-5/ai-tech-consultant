@@ -96,3 +96,21 @@ def test_followup_change_report_against_approved_baseline(pipeline_factory):
     ids = [r["id"] for r in v["payload"]["brief"]["requirements"]]
     assert ids == ["REQ-001", "REQ-003", "REQ-004"]  # stable ids, removed one gone
     assert "hours_delta" in report and v["status"] == "draft"
+
+
+def test_one_failed_feasibility_call_does_not_stop_the_proposal(pipeline_factory):
+    from task3_meeting_to_scope.schemas import FeasibilityJudgement
+
+    responder = Responder()
+    original = responder.__call__
+
+    def flaky(kwargs):
+        if kwargs["output_format"] is FeasibilityJudgement and "Instagram" in kwargs["messages"][0]["content"][0]["text"]:
+            return RuntimeError("HTTP 429 rate limited")
+        return original(kwargs)
+
+    p = pipeline_factory(flaky)
+    feas = {f["req_id"]: f for f in p.store.version(run_a(p))["payload"]["feasibility"]}
+    assert feas["REQ-002"]["classification"] == "needs_clarification"
+    assert "check manually" in feas["REQ-002"]["explanation"]
+    assert feas["REQ-001"]["classification"] == "existing_configuration"
