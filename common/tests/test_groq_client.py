@@ -131,3 +131,49 @@ def test_missing_key_is_a_clear_error(monkeypatch):
     monkeypatch.delenv("GROQ_API_KEY")
     with pytest.raises(GroqError):
         GroqAnthropicAdapter()
+
+
+def test_json_validation_400_is_retried_by_the_wrapper():
+    calls = {"n": 0}
+
+    def handler(req):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return httpx.Response(400, json={"error": {"message": "Failed to validate JSON. Please adjust your prompt.",
+                                                       "code": "json_validate_failed"}})
+        return ok({"status": "ok", "hours": 1, "tags": [], "note": None})
+
+    llm = LLM(client=adapter(handler))
+    llm.provider = "groq"
+    r = llm.structured(schema=Answer, system="s", user="q")
+    assert r.value.status == "ok" and calls["n"] == 2 and r.record.attempts == 2
+
+
+def test_long_retry_after_fails_fast_with_a_clear_message():
+    a = GroqAnthropicAdapter(api_key="t", sleep=lambda s: None, transport=httpx.MockTransport(
+        lambda req: httpx.Response(429, headers={"retry-after": "3600"}, json={"error": "daily limit"})))
+    with pytest.raises(GroqError, match="retry-after 3600s"):
+        a._post({"model": "x"})
+
+
+def test_network_outage_is_retried_then_reported():
+    waits = []
+
+    def handler(req):
+        raise httpx.ConnectError("getaddrinfo failed")
+
+    a = GroqAnthropicAdapter(api_key="t", sleep=waits.append, transport=httpx.MockTransport(handler))
+    with pytest.raises(GroqError, match="network error"):
+        a._post({"model": "x"})
+    assert waits == [1, 2, 4, 8, 16]
+
+
+def test_combine_reruns_replaces_only_infrastructure_failures():
+    from common.evals import EvalRow, combine_reruns
+
+    def row(cid, passed, reason=""):
+        return EvalRow("inbox", cid, "m", "x", "y", float(passed), 1, 0.0, passed, reason)
+
+    base = [row("A", False, "GroqError: getaddrinfo failed"), row("B", False, "category how_to != complaint"), row("C", True)]
+    out, n = combine_reruns(base, [row("A", True), row("B", True)])
+    assert n == 1 and [r.passed for r in out] == [True, False, True]  # genuine failure B is kept

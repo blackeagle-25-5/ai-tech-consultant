@@ -88,3 +88,27 @@ def print_summary(title: str, summary: dict) -> None:
               f"p50 {s['p50_latency_ms']} ms, p95 {s['p95_latency_ms']} ms, ${s['cost_per_case_usd']:.5f}/case")
         for g, gs in s["by_group"].items():
             print(f"    {g}: {gs['pass_rate']:.0%} of {gs['cases']}")
+
+
+INFRA_ERROR_MARKERS = ("getaddrinfo failed", "network error", "rate limit", "did not succeed", "Failed to validate JSON")
+
+
+def read_rows(path: Path) -> list[EvalRow]:
+    with Path(path).open(encoding="utf-8") as f:
+        return [EvalRow(**{**r, "quality": float(r["quality"]), "latency_ms": int(r["latency_ms"]),
+                           "cost": float(r["cost"]), "passed": r["passed"] == "True"}) for r in csv.DictReader(f)]
+
+
+def combine_reruns(base: list[EvalRow], reruns: list[EvalRow]) -> tuple[list[EvalRow], int]:
+    """Replace rows that failed for infrastructure reasons (network, rate limit, invalid JSON) with their re-run.
+    Genuine model failures are never replaced. Returns (rows, number replaced)."""
+    rerun = {(r.model, r.case_id): r for r in reruns}
+    out, replaced = [], 0
+    for r in base:
+        infra = not r.passed and any(m in r.failure_reason for m in INFRA_ERROR_MARKERS)
+        if infra and (r.model, r.case_id) in rerun:
+            out.append(rerun[(r.model, r.case_id)])
+            replaced += 1
+        else:
+            out.append(r)
+    return out, replaced

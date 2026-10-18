@@ -1,0 +1,40 @@
+{
+  "groq:openai/gpt-oss-20b": {
+    "cases": 65,
+    "pass_rate": 0.8,
+    "mean_quality": 0.708,
+    "p50_latency_ms": 2552,
+    "p95_latency_ms": 8289,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "classify_dev": {
+        "cases": 50,
+        "pass_rate": 0.82
+      },
+      "classify_holdout": {
+        "cases": 15,
+        "pass_rate": 0.733
+      }
+    }
+  },
+  "groq:openai/gpt-oss-120b": {
+    "cases": 65,
+    "pass_rate": 0.585,
+    "mean_quality": 0.544,
+    "p50_latency_ms": 2795,
+    "p95_latency_ms": 7576,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "classify_dev": {
+        "cases": 50,
+        "pass_rate": 0.7
+      },
+      "classify_holdout": {
+        "cases": 15,
+        "pass_rate": 0.2
+      }
+    }
+  }
+}

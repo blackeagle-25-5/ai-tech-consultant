@@ -18,6 +18,7 @@ from task1_knowledge_brain.config import Settings, get_settings
 from task1_knowledge_brain.db import connect
 from task1_knowledge_brain.ingestion.crawler import PoliteFetcher, make_client
 from task1_knowledge_brain.ingestion.pipeline import RunReport, run_ingestion
+from task1_knowledge_brain.retrieval import strategies
 from task1_knowledge_brain.retrieval.index import ChunkIndex, Embedder, FastEmbedder, SearchHit
 
 PERSONAL_INFO_MESSAGE = ("I can't share personal information about individuals, and the help center is not a source "
@@ -123,6 +124,9 @@ class KnowledgeService:
         if self.llm is None:
             raise LLMUnavailable("No model key configured (set ANTHROPIC_API_KEY, or GROQ_API_KEY for the dev fallback).")
 
+        # Evidence = ranked passages + the remaining passages of the top 2 short articles, so lists split across
+        # passages reach the model whole (K09). Measured: no change to hit@k/MRR, +7 ms (EVALS.md).
+        hits = strategies.add_siblings(self.index, question, hits)
         result, labels, prompt_version = generate_answer(self.llm, question, hits, model_id)
         draft = result.value
         cited = validated_citations(draft, labels)

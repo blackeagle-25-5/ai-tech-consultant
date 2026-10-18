@@ -1,0 +1,21 @@
+{
+  "groq:openai/gpt-oss-120b": {
+    "cases": 18,
+    "pass_rate": 0.056,
+    "mean_quality": 0.056,
+    "p50_latency_ms": 50,
+    "p95_latency_ms": 274,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "classify_dev": {
+        "cases": 6,
+        "pass_rate": 0.167
+      },
+      "classify_holdout": {
+        "cases": 12,
+        "pass_rate": 0.0
+      }
+    }
+  }
+}

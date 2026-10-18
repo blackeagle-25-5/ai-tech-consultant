@@ -57,13 +57,14 @@ def new_agent(model: str, kb: KnowledgeClient | None = None) -> tuple[InboxAgent
     return agent, db
 
 
-def eval_classification(items: list[LabelledEmail], model_key: str, split: str) -> list[EvalRow]:
+def eval_classification(items: list[LabelledEmail], model_key: str, split: str,
+                        version: str | None = None) -> list[EvalRow]:
     agent, _ = new_agent(MODELS[model_key])
     rows = []
     for item in items:
         start = time.perf_counter()
         try:
-            res, _ = agent.classify(item.email)
+            res, _ = agent.classify(item.email, version=version)
         except Exception as exc:  # recorded as a failed case
             rows.append(EvalRow("inbox", item.email.id, model_key, item.expected.category, "ERROR", 0.0,
                                 int((time.perf_counter() - start) * 1000), 0.0, False, str(exc)[:200],
@@ -141,12 +142,19 @@ def main() -> None:
     ap.add_argument("--part", choices=["classify", "draft", "kb_down", "all"], default="classify")
     ap.add_argument("--models", default="haiku,sonnet")
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--classifier-version", default=None, help="e.g. v2 (default: active version)")
+    ap.add_argument("--ids", default="", help="Only these email ids (e.g. to re-run cases that hit network errors)")
     args = ap.parse_args()
     dev, holdout = load("dev"), load("holdout")
+    if args.ids:
+        wanted = set(args.ids.split(","))
+        dev = [e for e in dev if e.email.id in wanted]
+        holdout = [e for e in holdout if e.email.id in wanted]
     rows: list[EvalRow] = []
     for m in args.models.split(","):
         if args.part in ("classify", "all"):
-            rows += eval_classification(dev[:args.limit], m, "dev") + eval_classification(holdout, m, "holdout")
+            v = args.classifier_version
+            rows += eval_classification(dev[:args.limit], m, "dev", v) + eval_classification(holdout, m, "holdout", v)
         if args.part in ("draft", "all"):
             sample = (dev + holdout)[:args.limit] if args.limit else dev + holdout
             rows += eval_drafts(sample, m)
@@ -155,9 +163,10 @@ def main() -> None:
             rows += eval_kb_down(how_tos, m)
     for r in rows:  # label rows with the model that actually ran (Claude, or the Groq fallback)
         r.model = model_label(MODELS[r.model]) if r.model in MODELS else r.model
-    path = write_rows(f"inbox_{args.part}", rows)
+    tag = f"_{args.classifier_version}" if args.classifier_version else ""
+    path = write_rows(f"inbox_{args.part}{tag}", rows)
     summary = summarize(rows)
-    save_summary(f"inbox_{args.part}", summary)
+    save_summary(f"inbox_{args.part}{tag}", summary)
     print_summary(f"Inbox Agent - {args.part}", summary)
     print(f"\nRows written to {path}")
     for r in rows:

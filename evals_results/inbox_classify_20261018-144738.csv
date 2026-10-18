@@ -1,0 +1,131 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+inbox,D01,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,612,0.0,True,,classify_dev
+inbox,D02,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,524,0.0,True,,classify_dev
+inbox,D03,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,586,0.0,True,,classify_dev
+inbox,D04,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,274,0.0,True,,classify_dev
+inbox,D05,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,581,0.0,True,,classify_dev
+inbox,D06,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,570,0.0,True,,classify_dev
+inbox,D07,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,341,0.0,True,,classify_dev
+inbox,D08,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,567,0.0,True,,classify_dev
+inbox,D09,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,927,0.0,True,,classify_dev
+inbox,D10,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,429,0.0,True,,classify_dev
+inbox,D11,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,2319,0.0,True,,classify_dev
+inbox,D12,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,5738,0.0,True,,classify_dev
+inbox,T01,groq:openai/gpt-oss-20b,troubleshooting/medium/normal,troubleshooting/low/normal flags=[],0.667,6754,0.0,True,risk low != medium,classify_dev
+inbox,T02,groq:openai/gpt-oss-20b,troubleshooting/medium/high,troubleshooting/low/normal flags=[],0.333,5904,0.0,True,risk low != medium,classify_dev
+inbox,T03,groq:openai/gpt-oss-20b,troubleshooting/high/high,troubleshooting/medium/normal flags=[],0.333,6787,0.0,True,risk medium != high,classify_dev
+inbox,T04,groq:openai/gpt-oss-20b,troubleshooting/low/normal,troubleshooting/low/normal flags=[],1.0,8289,0.0,True,,classify_dev
+inbox,T05,groq:openai/gpt-oss-20b,troubleshooting/low/normal,how_to/low/normal flags=[],0.667,1491,0.0,False,category how_to != troubleshooting,classify_dev
+inbox,T06,groq:openai/gpt-oss-20b,troubleshooting/medium/normal,troubleshooting/low/normal flags=[],0.667,7794,0.0,True,risk low != medium,classify_dev
+inbox,T07,groq:openai/gpt-oss-20b,troubleshooting/medium/normal,troubleshooting/low/normal flags=[],0.667,7034,0.0,True,risk low != medium,classify_dev
+inbox,T08,groq:openai/gpt-oss-20b,troubleshooting/medium/normal,how_to/low/normal flags=[],0.333,1674,0.0,False,category how_to != troubleshooting; risk low != medium,classify_dev
+inbox,T09,groq:openai/gpt-oss-20b,troubleshooting/medium/high,troubleshooting/low/normal flags=[],0.333,2675,0.0,True,risk low != medium,classify_dev
+inbox,T10,groq:openai/gpt-oss-20b,troubleshooting/low/normal,how_to/low/normal flags=[],0.667,6738,0.0,False,category how_to != troubleshooting,classify_dev
+inbox,P01,groq:openai/gpt-oss-20b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,2632,0.0,True,,classify_dev
+inbox,P02,groq:openai/gpt-oss-20b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,6316,0.0,True,,classify_dev
+inbox,P03,groq:openai/gpt-oss-20b,project_request/medium/low,project_request/medium/low flags=[],1.0,2587,0.0,True,,classify_dev
+inbox,P04,groq:openai/gpt-oss-20b,project_request/medium/normal,project_request/low/normal flags=[],0.667,7567,0.0,True,risk low != medium,classify_dev
+inbox,P05,groq:openai/gpt-oss-20b,project_request/medium/low,project_request/low/normal flags=[],0.333,1750,0.0,True,risk low != medium,classify_dev
+inbox,P06,groq:openai/gpt-oss-20b,project_request/medium/normal,project_request/low/normal flags=[],0.667,2611,0.0,True,risk low != medium,classify_dev
+inbox,R01,groq:openai/gpt-oss-20b,refund_cancellation/high/normal,refund_cancellation/high/high flags=['financial_request'],0.667,8028,0.0,True,,classify_dev
+inbox,R02,groq:openai/gpt-oss-20b,refund_cancellation/high/high,refund_cancellation/high/high flags=['financial_request'],1.0,1842,0.0,True,,classify_dev
+inbox,R03,groq:openai/gpt-oss-20b,refund_cancellation/medium/normal,how_to/low/normal flags=[],0.333,2662,0.0,False,category how_to != refund_cancellation; risk low != medium,classify_dev
+inbox,R04,groq:openai/gpt-oss-20b,refund_cancellation/high/normal,refund_cancellation/high/normal flags=[],1.0,2552,0.0,True,,classify_dev
+inbox,R05,groq:openai/gpt-oss-20b,refund_cancellation/high/normal,refund_cancellation/high/high flags=['financial_request'],0.667,3057,0.0,True,,classify_dev
+inbox,R06,groq:openai/gpt-oss-20b,refund_cancellation/high/normal,"refund_cancellation/high/high flags=['churn_risk', 'financial_request']",0.667,1630,0.0,True,,classify_dev
+inbox,C01,groq:openai/gpt-oss-20b,complaint,ERROR,0.0,6815,0.0,False,"GroqError: Groq HTTP 400: {""error"":{""message"":""Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details."",""type"":""invalid_request_error"",""code"":""json_validate_faile",classify_dev
+inbox,C02,groq:openai/gpt-oss-20b,complaint/high/high,troubleshooting/high/high flags=['churn_risk'],0.667,7049,0.0,False,category troubleshooting != complaint,classify_dev
+inbox,C03,groq:openai/gpt-oss-20b,complaint/high/high,"complaint/high/high flags=['legal_threat', 'security_sensitive']",1.0,2654,0.0,True,,classify_dev
+inbox,C04,groq:openai/gpt-oss-20b,complaint/medium/normal,complaint/high/normal flags=['churn_risk'],0.667,8827,0.0,True,risk high != medium,classify_dev
+inbox,C05,groq:openai/gpt-oss-20b,complaint/medium/normal,complaint/high/high flags=['churn_risk'],0.333,5288,0.0,True,risk high != medium,classify_dev
+inbox,C06,groq:openai/gpt-oss-20b,complaint/high/normal,complaint/high/normal flags=['churn_risk'],1.0,2639,0.0,True,,classify_dev
+inbox,Q01,groq:openai/gpt-oss-20b,quote_request/medium/normal,quote_request/low/normal flags=[],0.667,14875,0.0,True,risk low != medium,classify_dev
+inbox,Q02,groq:openai/gpt-oss-20b,quote_request/medium/normal,quote_request/low/normal flags=[],0.667,4011,0.0,True,risk low != medium,classify_dev
+inbox,Q03,groq:openai/gpt-oss-20b,quote_request/medium/low,quote_request/low/normal flags=[],0.333,4338,0.0,True,risk low != medium,classify_dev
+inbox,Q04,groq:openai/gpt-oss-20b,quote_request/medium/low,quote_request/low/normal flags=[],0.333,5791,0.0,True,risk low != medium,classify_dev
+inbox,Q05,groq:openai/gpt-oss-20b,quote_request,ERROR,0.0,1537,0.0,False,"GroqError: Groq HTTP 400: {""error"":{""message"":""Failed to validate JSON. Please adjust your prompt. See 'failed_generation' for more details."",""type"":""invalid_request_error"",""code"":""json_validate_faile",classify_dev
+inbox,F01,groq:openai/gpt-oss-20b,follow_up/medium/normal,follow_up/low/normal flags=[],0.667,7226,0.0,True,risk low != medium,classify_dev
+inbox,F02,groq:openai/gpt-oss-20b,follow_up/low/normal,how_to/low/normal flags=[],0.667,15306,0.0,False,category how_to != follow_up,classify_dev
+inbox,F03,groq:openai/gpt-oss-20b,follow_up/medium/high,follow_up/low/high flags=[],0.667,6320,0.0,True,risk low != medium,classify_dev
+inbox,F04,groq:openai/gpt-oss-20b,follow_up/high/high,refund_cancellation/high/high flags=['financial_request'],0.667,6506,0.0,False,category refund_cancellation != follow_up,classify_dev
+inbox,F05,groq:openai/gpt-oss-20b,follow_up,ERROR,0.0,121028,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,H01,groq:openai/gpt-oss-20b,how_to,ERROR,0.0,31016,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H02,groq:openai/gpt-oss-20b,other,ERROR,0.0,31019,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H03,groq:openai/gpt-oss-20b,how_to,ERROR,0.0,31015,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H04,groq:openai/gpt-oss-20b,refund_cancellation,ERROR,0.0,31017,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H05,groq:openai/gpt-oss-20b,how_to,ERROR,0.0,31012,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H06,groq:openai/gpt-oss-20b,troubleshooting,ERROR,0.0,31015,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H07,groq:openai/gpt-oss-20b,how_to,ERROR,0.0,31021,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H08,groq:openai/gpt-oss-20b,complaint,ERROR,0.0,31024,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H09,groq:openai/gpt-oss-20b,follow_up,ERROR,0.0,31017,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H10,groq:openai/gpt-oss-20b,quote_request,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H11,groq:openai/gpt-oss-20b,other,ERROR,0.0,31008,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H12,groq:openai/gpt-oss-20b,how_to,ERROR,0.0,31009,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H13,groq:openai/gpt-oss-20b,project_request,ERROR,0.0,31009,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H14,groq:openai/gpt-oss-20b,troubleshooting,ERROR,0.0,31011,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,H15,groq:openai/gpt-oss-20b,follow_up,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_holdout
+inbox,D01,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D02,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31009,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D03,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31011,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D04,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D05,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D06,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,31010,0.0,False,GroqError: Groq request failed: [Errno 11001] getaddrinfo failed,classify_dev
+inbox,D07,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,31608,0.0,True,,classify_dev
+inbox,D08,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,580,0.0,True,,classify_dev
+inbox,D09,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,745,0.0,True,,classify_dev
+inbox,D10,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,617,0.0,True,,classify_dev
+inbox,D11,groq:openai/gpt-oss-120b,how_to/low/normal,how_to/low/normal flags=[],1.0,750,0.0,True,,classify_dev
+inbox,D12,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,826,0.0,True,,classify_dev
+inbox,T01,groq:openai/gpt-oss-120b,troubleshooting/medium/normal,troubleshooting/medium/normal flags=[],1.0,686,0.0,True,,classify_dev
+inbox,T02,groq:openai/gpt-oss-120b,troubleshooting/medium/high,troubleshooting/medium/normal flags=[],0.667,739,0.0,True,,classify_dev
+inbox,T03,groq:openai/gpt-oss-120b,troubleshooting/high/high,troubleshooting/high/high flags=[],1.0,666,0.0,True,,classify_dev
+inbox,T04,groq:openai/gpt-oss-120b,troubleshooting/low/normal,troubleshooting/low/normal flags=[],1.0,748,0.0,True,,classify_dev
+inbox,T05,groq:openai/gpt-oss-120b,troubleshooting/low/normal,how_to/low/normal flags=[],0.667,794,0.0,False,category how_to != troubleshooting,classify_dev
+inbox,T06,groq:openai/gpt-oss-120b,troubleshooting/medium/normal,troubleshooting/medium/normal flags=[],1.0,3629,0.0,True,,classify_dev
+inbox,T07,groq:openai/gpt-oss-120b,troubleshooting/medium/normal,troubleshooting/low/normal flags=[],0.667,6867,0.0,True,risk low != medium,classify_dev
+inbox,T08,groq:openai/gpt-oss-120b,troubleshooting/medium/normal,how_to/low/normal flags=[],0.333,2816,0.0,False,category how_to != troubleshooting; risk low != medium,classify_dev
+inbox,T09,groq:openai/gpt-oss-120b,troubleshooting/medium/high,troubleshooting/medium/normal flags=[],0.667,7761,0.0,True,,classify_dev
+inbox,T10,groq:openai/gpt-oss-120b,troubleshooting/low/normal,how_to/low/normal flags=[],0.667,7192,0.0,False,category how_to != troubleshooting,classify_dev
+inbox,P01,groq:openai/gpt-oss-120b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,6832,0.0,True,,classify_dev
+inbox,P02,groq:openai/gpt-oss-120b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,7576,0.0,True,,classify_dev
+inbox,P03,groq:openai/gpt-oss-120b,project_request/medium/low,project_request/medium/normal flags=[],0.667,5771,0.0,True,,classify_dev
+inbox,P04,groq:openai/gpt-oss-120b,project_request/medium/normal,project_request/low/normal flags=[],0.667,7254,0.0,True,risk low != medium,classify_dev
+inbox,P05,groq:openai/gpt-oss-120b,project_request/medium/low,project_request/medium/normal flags=[],0.667,3036,0.0,True,,classify_dev
+inbox,P06,groq:openai/gpt-oss-120b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,4350,0.0,True,,classify_dev
+inbox,R01,groq:openai/gpt-oss-120b,refund_cancellation/high/normal,"refund_cancellation/high/high flags=['financial_request', 'churn_risk']",0.667,2287,0.0,True,,classify_dev
+inbox,R02,groq:openai/gpt-oss-120b,refund_cancellation/high/high,refund_cancellation/high/high flags=['financial_request'],1.0,6896,0.0,True,,classify_dev
+inbox,R03,groq:openai/gpt-oss-120b,refund_cancellation/medium/normal,how_to/low/normal flags=[],0.333,2795,0.0,False,category how_to != refund_cancellation; risk low != medium,classify_dev
+inbox,R04,groq:openai/gpt-oss-120b,refund_cancellation/high/normal,refund_cancellation/medium/normal flags=['financial_request'],0.667,6828,0.0,True,risk medium != high,classify_dev
+inbox,R05,groq:openai/gpt-oss-120b,refund_cancellation/high/normal,"refund_cancellation/high/high flags=['financial_request', 'churn_risk']",0.667,6901,0.0,True,,classify_dev
+inbox,R06,groq:openai/gpt-oss-120b,refund_cancellation/high/normal,"refund_cancellation/high/high flags=['financial_request', 'churn_risk']",0.667,2912,0.0,True,,classify_dev
+inbox,C01,groq:openai/gpt-oss-120b,complaint/high/high,troubleshooting/high/high flags=['churn_risk'],0.667,6858,0.0,False,category troubleshooting != complaint,classify_dev
+inbox,C02,groq:openai/gpt-oss-120b,complaint/high/high,troubleshooting/high/high flags=['churn_risk'],0.667,6859,0.0,False,category troubleshooting != complaint,classify_dev
+inbox,C03,groq:openai/gpt-oss-120b,complaint/high/high,"complaint/high/high flags=['legal_threat', 'personal_data']",1.0,7205,0.0,True,,classify_dev
+inbox,C04,groq:openai/gpt-oss-120b,complaint/medium/normal,complaint/medium/normal flags=[],1.0,3877,0.0,True,,classify_dev
+inbox,C05,groq:openai/gpt-oss-120b,complaint/medium/normal,troubleshooting/medium/normal flags=[],0.667,2987,0.0,False,category troubleshooting != complaint,classify_dev
+inbox,C06,groq:openai/gpt-oss-120b,complaint/high/normal,complaint/high/normal flags=['financial_request'],1.0,3578,0.0,True,,classify_dev
+inbox,Q01,groq:openai/gpt-oss-120b,quote_request/medium/normal,quote_request/medium/normal flags=[],1.0,1810,0.0,True,,classify_dev
+inbox,Q02,groq:openai/gpt-oss-120b,quote_request/medium/normal,quote_request/medium/normal flags=[],1.0,2607,0.0,True,,classify_dev
+inbox,Q03,groq:openai/gpt-oss-120b,quote_request/medium/low,quote_request/medium/normal flags=[],0.667,6927,0.0,True,,classify_dev
+inbox,Q04,groq:openai/gpt-oss-120b,quote_request/medium/low,quote_request/medium/normal flags=[],0.667,2859,0.0,True,,classify_dev
+inbox,Q05,groq:openai/gpt-oss-120b,quote_request/medium/normal,quote_request/low/normal flags=[],0.667,2933,0.0,True,risk low != medium,classify_dev
+inbox,F01,groq:openai/gpt-oss-120b,follow_up/medium/normal,follow_up/low/normal flags=[],0.667,2596,0.0,True,risk low != medium,classify_dev
+inbox,F02,groq:openai/gpt-oss-120b,follow_up/low/normal,troubleshooting/low/normal flags=[],0.667,6943,0.0,False,category troubleshooting != follow_up,classify_dev
+inbox,F03,groq:openai/gpt-oss-120b,follow_up/medium/high,follow_up/low/normal flags=[],0.333,3168,0.0,True,risk low != medium,classify_dev
+inbox,F04,groq:openai/gpt-oss-120b,follow_up/high/high,refund_cancellation/high/normal flags=['financial_request'],0.333,3185,0.0,False,category refund_cancellation != follow_up,classify_dev
+inbox,F05,groq:openai/gpt-oss-120b,follow_up/medium/normal,troubleshooting/low/normal flags=[],0.333,7193,0.0,False,category troubleshooting != follow_up; risk low != medium,classify_dev
+inbox,H01,groq:openai/gpt-oss-120b,how_to/low/low,how_to/low/normal flags=[],0.667,1882,0.0,True,,classify_holdout
+inbox,H02,groq:openai/gpt-oss-120b,other/high/normal,"other/high/high flags=['prompt_injection', 'security_sensitive']",0.667,4509,0.0,True,,classify_holdout
+inbox,H03,groq:openai/gpt-oss-120b,how_to/high/normal,how_to/medium/normal flags=['security_sensitive'],0.667,5196,0.0,True,risk medium != high,classify_holdout
+inbox,H04,groq:openai/gpt-oss-120b,refund_cancellation,ERROR,0.0,60,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H05,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,61,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H06,groq:openai/gpt-oss-120b,troubleshooting,ERROR,0.0,61,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H07,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,58,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H08,groq:openai/gpt-oss-120b,complaint,ERROR,0.0,62,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H09,groq:openai/gpt-oss-120b,follow_up,ERROR,0.0,61,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H10,groq:openai/gpt-oss-120b,quote_request,ERROR,0.0,50,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H11,groq:openai/gpt-oss-120b,other,ERROR,0.0,58,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H12,groq:openai/gpt-oss-120b,how_to,ERROR,0.0,63,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H13,groq:openai/gpt-oss-120b,project_request,ERROR,0.0,97,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H14,groq:openai/gpt-oss-120b,troubleshooting,ERROR,0.0,60,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout
+inbox,H15,groq:openai/gpt-oss-120b,follow_up,ERROR,0.0,67,0.0,False,GroqError: Groq rate limit / server error persisted (waited 0s). Free-tier limits are low; try again later or use Claude.,classify_holdout

@@ -111,3 +111,26 @@ def test_daily_scheduler_registers_one_job_and_skips_when_busy():
 
     asyncio.run(run())
     assert calls == []
+
+
+def test_query_expansion_fuses_rewrites_and_keeps_original_similarity(index):
+    from task1_knowledge_brain.retrieval import strategies
+    from task1_knowledge_brain.retrieval.chunker import Chunk
+
+    index.upsert_chunk(Chunk("s1", "10", "article", "Payment Settings", "u1", "", "Finance Payment Settings add new payment gateway Stripe"))
+    index.upsert_chunk(Chunk("s2", "11", "article", "Cancel", "u2", "", "cancel subscription card"))
+    fake = FakeAnthropic(lambda kw: strategies.SearchRewrites(queries=["add new payment gateway Finance Payment Settings"]))
+    hits, calls = strategies.expanded(index, LLM(client=fake), "connect stripe for cards", "m", k=2)
+    assert calls == 1 and hits[0].chunk_id == "s1"
+    assert abs(hits[0].similarity - float(index.embedder.embed_query("connect stripe for cards")
+                                          @ index.embedder.embed_documents([hits[0].text])[0])) < 1e-4
+
+
+def test_query_expansion_failure_falls_back_to_plain_search(index):
+    from task1_knowledge_brain.retrieval import strategies
+    from task1_knowledge_brain.retrieval.chunker import Chunk
+
+    index.upsert_chunk(Chunk("s1", "10", "article", "T", "u1", "", "stripe gateway"))
+    broken = FakeAnthropic(lambda kw: RuntimeError("rate limited"))
+    hits, calls = strategies.expanded(index, LLM(client=broken), "stripe gateway", "m", k=1)
+    assert [h.chunk_id for h in hits] == ["s1"]

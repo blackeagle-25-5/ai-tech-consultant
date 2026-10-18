@@ -18,6 +18,7 @@ from pathlib import Path
 import yaml
 
 from common.evals import RESULTS_DIR
+from common.llm import HAIKU
 from task1_knowledge_brain.evals.run_evals import copy_service
 from task1_knowledge_brain.retrieval import strategies
 
@@ -78,17 +79,23 @@ def main() -> None:
         "bge_rerank": lambda q: (strategies.reranked(idx, rr("BAAI/bge-reranker-base"), q), 0),
         "bge_rerank_siblings": lambda q: (strategies.add_siblings(
             idx, q, strategies.reranked(idx, rr("BAAI/bge-reranker-base"), q)), 0),
+        "expand": lambda q: strategies.expanded(idx, svc.llm, q, HAIKU),
+        "expand_siblings": lambda q: (lambda hr: (strategies.add_siblings(idx, q, hr[0]), hr[1]))(
+            strategies.expanded(idx, svc.llm, q, HAIKU)),
     }
     results = []
     for name in args.strategies.split(","):
-        options[name]("warm up")  # load models outside the timed loop
+        if not name.startswith("expand"):
+            options[name]("warm up")  # load models outside the timed loop (no model call wasted for expand)
         r = evaluate(name, options[name], svc)
         results.append(r)
         print(f"{name:20s} hit@5 {r['hit@5']:.0%}  hit@8 {r['hit@8']:.0%}  MRR {r['mrr']:.3f}  K32 rank {r['k32_rank']}  "
               f"K09 complete {r['k09_evidence_complete']}  passages {r['mean_passages']}  {r['mean_latency_ms']:.0f} ms/query")
     RESULTS_DIR.mkdir(exist_ok=True)
     out = RESULTS_DIR / "retrieval_experiments.json"
-    out.write_text(json.dumps(results, indent=2), encoding="utf-8")
+    previous = json.loads(out.read_text(encoding="utf-8")) if out.exists() else []
+    merged = {r["strategy"]: r for r in previous} | {r["strategy"]: r for r in results}
+    out.write_text(json.dumps(list(merged.values()), indent=2), encoding="utf-8")
     print(f"\nSaved {out}")
 
 

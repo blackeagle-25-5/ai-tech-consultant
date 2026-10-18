@@ -1,0 +1,19 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+inbox,C01,groq:openai/gpt-oss-20b,complaint/high/high,troubleshooting/high/high flags=['churn_risk'],0.667,723,0.0,False,category troubleshooting != complaint,classify_dev
+inbox,Q05,groq:openai/gpt-oss-20b,quote_request/medium/normal,quote_request/low/normal flags=[],0.667,505,0.0,True,risk low != medium,classify_dev
+inbox,F05,groq:openai/gpt-oss-20b,follow_up/medium/normal,troubleshooting/low/normal flags=[],0.333,602,0.0,False,category troubleshooting != follow_up; risk low != medium,classify_dev
+inbox,H01,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,608,0.0,True,,classify_holdout
+inbox,H02,groq:openai/gpt-oss-20b,other/high/normal,"other/high/high flags=['prompt_injection', 'security_sensitive']",0.667,404,0.0,True,,classify_holdout
+inbox,H03,groq:openai/gpt-oss-20b,how_to/high/normal,other/high/normal flags=['security_sensitive'],0.667,1070,0.0,False,category other != how_to,classify_holdout
+inbox,H04,groq:openai/gpt-oss-20b,refund_cancellation/high/normal,"refund_cancellation/high/high flags=['financial_request', 'churn_risk']",0.667,645,0.0,True,,classify_holdout
+inbox,H05,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,616,0.0,True,,classify_holdout
+inbox,H06,groq:openai/gpt-oss-20b,troubleshooting/high/high,troubleshooting/high/high flags=[],1.0,476,0.0,True,,classify_holdout
+inbox,H07,groq:openai/gpt-oss-20b,how_to/low/low,how_to/low/normal flags=[],0.667,790,0.0,True,,classify_holdout
+inbox,H08,groq:openai/gpt-oss-20b,complaint/high/high,"complaint/high/high flags=['churn_risk', 'financial_request']",1.0,254,0.0,True,,classify_holdout
+inbox,H09,groq:openai/gpt-oss-20b,follow_up/low/low,how_to/low/normal flags=[],0.333,659,0.0,False,category how_to != follow_up,classify_holdout
+inbox,H10,groq:openai/gpt-oss-20b,quote_request/medium/normal,quote_request/low/normal flags=[],0.667,1010,0.0,True,risk low != medium,classify_holdout
+inbox,H11,groq:openai/gpt-oss-20b,other/low/low,other/low/normal flags=[],0.667,401,0.0,True,,classify_holdout
+inbox,H12,groq:openai/gpt-oss-20b,how_to/low/normal,how_to/low/normal flags=[],1.0,653,0.0,True,,classify_holdout
+inbox,H13,groq:openai/gpt-oss-20b,project_request/medium/normal,project_request/medium/normal flags=[],1.0,539,0.0,True,,classify_holdout
+inbox,H14,groq:openai/gpt-oss-20b,troubleshooting/medium/normal,how_to/low/normal flags=[],0.333,4711,0.0,False,category how_to != troubleshooting; risk low != medium,classify_holdout
+inbox,H15,groq:openai/gpt-oss-20b,follow_up/high/high,complaint/high/high flags=['legal_threat'],0.667,6671,0.0,False,category complaint != follow_up,classify_holdout
