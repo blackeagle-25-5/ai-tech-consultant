@@ -27,8 +27,9 @@ class Settings:
     vision_model: str = os.getenv("KB_VISION_MODEL", HAIKU)
     answer_model: str = os.getenv("KB_ANSWER_MODEL", HAIKU)
     api_key: str = os.getenv("KB_API_KEY", "")
-    # Retrieval: below this best-chunk score the bot abstains without calling Claude.
-    min_relevance: float = float(os.getenv("KB_MIN_RELEVANCE", "0.45"))
+    # Retrieval: below this best-chunk similarity the bot abstains without calling Claude.
+    # 0.65 calibrated on the eval set: answerable questions scored >= 0.706 (see EVALS.md).
+    min_relevance: float = float(os.getenv("KB_MIN_RELEVANCE", "0.65"))
     top_k: int = 8
 
 

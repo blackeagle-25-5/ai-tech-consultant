@@ -1,0 +1,44 @@
+# Hand-labelled expectations for the transcripts. Labelled against the PLACEHOLDER transcripts:
+# re-check every item after replacing them with the real recordings.
+# A requirement matches if its title+description contains at least one keyword from EVERY group (case-insensitive).
+
+meeting_a:
+  requirements:
+    - {id: A01, what: Filter by specialty, groups: [[specialt]]}
+    - {id: A02, what: Filter by price range, groups: [[price]]}
+    - {id: A03, what: Filter online vs in-person, groups: [[online, in-person, in person, session type]]}
+    - {id: A04, what: Filter by trainer gender, groups: [[gender]]}
+    - {id: A05, what: Sort results by distance, groups: [[distance, nearest, closest, proximity]]}
+    - {id: A06, what: AI / natural-language search (optional), groups: [[ai, natural language, natural-language]]}
+    - {id: A07, what: Mobile-friendly signup form, groups: [[signup, sign-up, sign up, registration]], also: [mobile, phone]}
+    - {id: A08, what: Mobile-friendly search results page, groups: [[result]], also: [mobile, phone]}
+    - {id: A09, what: Instagram feed on profiles, groups: [[instagram]]}
+    - {id: A10, what: Featured/premium trainers at top, groups: [[featured, premium, paid]]}
+    - {id: A11, what: Bigger contact button on profile, groups: [[contact]]}
+    - {id: A12, what: New profile fields trainers must fill, groups: [[field]]}
+  deadline_contains: [december, "15"]
+  budget_contains: ["5", "000"]
+  must_exclude: [app]   # mobile app explicitly excluded
+
+meeting_b:
+  requirements:
+    - {id: B01, what: Paid featured job post (one-off), groups: [[job]]}
+    - {id: B02, what: Coupon codes at checkout, groups: [[coupon, discount code, promo]]}
+    - {id: B03, what: Order summary page, groups: [[summary]]}
+    - {id: B04, what: Payment success/failure emails, groups: [[email, notification], [fail, success]]}
+    - {id: B05, what: SMS notifications (optional), groups: [[sms, text message]]}
+    - {id: B06, what: Stripe payment gateway, groups: [[stripe]]}
+    - {id: B07, what: QuickBooks invoice sync, groups: [[quickbooks]]}
+    - {id: B08, what: Automatic retry of failed renewals, groups: [[retry, retries]]}
+    - {id: B09, what: Card-expiry reminder email, groups: [[expir]]}
+  deadline_contains: [march, quarter]
+  must_exclude: [design]
+
+meeting_c_changes:
+  removed_contains: [instagram]
+  modified_or_added_contains: [language]
+  gender_removed_or_modified: true
+  added_out_of_scope_contains: [book, intro, session]
+  blog_flagged: true          # blog writing must appear as out-of-scope or excluded
+  deadline_change_contains: [january]
+  must_not_remove: [distance, featured]
