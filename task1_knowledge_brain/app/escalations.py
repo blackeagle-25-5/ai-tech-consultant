@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -10,7 +11,8 @@ from pathlib import Path
 from task1_knowledge_brain.retrieval.chunker import Chunk, make_chunk_id
 from task1_knowledge_brain.retrieval.index import ChunkIndex
 
-ESCALATED_EVAL_PATH = Path(__file__).resolve().parent.parent / "evals" / "escalated_questions.jsonl"
+ESCALATED_EVAL_PATH = Path(os.getenv("KB_ESCALATED_EVAL_PATH",
+                                   Path(__file__).resolve().parent.parent / "evals" / "escalated_questions.jsonl"))
 
 
 def now() -> str:

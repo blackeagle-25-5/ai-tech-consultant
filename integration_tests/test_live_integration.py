@@ -45,6 +45,7 @@ def api(tmp_path_factory):
             shutil.copy(src, data_dir / ("knowledge.db" + suffix))
     port = free_port()
     env = {**os.environ, "KB_DATA_DIR": str(data_dir), "KB_DAILY_SYNC": "0", "PYTHONPATH": str(ROOT),
+           "KB_ESCALATED_EVAL_PATH": str(data_dir / "escalated.jsonl"),
            "HF_HUB_DISABLE_SYMLINKS_WARNING": "1"}
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "task1_knowledge_brain.app.api:app", "--port", str(port)],
                             cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
