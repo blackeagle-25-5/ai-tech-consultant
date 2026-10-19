@@ -1,0 +1,41 @@
+# Render Blueprint Specification
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Architecture: Single Unified Web Service (Streamlit UI + FastAPI Backend)
+# Fits within Render's Free Tier (750 hours/month), wakes up together,
+# and eliminates cross-service cold-start latency.
+#
+# To deploy two independent microservices instead, see RENDER_GUIDE.md.
+
+services:
+  - type: web
+    name: ai-tech-consultant
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_SMALL_MODEL
+        value: openai/gpt-oss-20b
+      - key: GROQ_LARGE_MODEL
+        value: openai/gpt-oss-120b
+      - key: GROQ_VISION_MODEL
+        value: qwen/qwen3.8-27b
+      - key: KB_DAILY_SYNC
+        value: "0"
+      - key: CRAWL_CONCURRENCY
+        value: "2"
+      - key: CRAWL_DELAY_S
+        value: "1.0"
+      - key: MAX_IMAGES
+        value: "4000"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: KB_API_KEY
+        sync: false

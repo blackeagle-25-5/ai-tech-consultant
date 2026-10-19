@@ -1,0 +1,17 @@
+{
+  "groq:openai/gpt-oss-20b": {
+    "cases": 3,
+    "pass_rate": 1.0,
+    "mean_quality": 1.0,
+    "p50_latency_ms": 0,
+    "p95_latency_ms": 0,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "kb_down": {
+        "cases": 3,
+        "pass_rate": 1.0
+      }
+    }
+  }
+}

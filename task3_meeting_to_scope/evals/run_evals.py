@@ -19,7 +19,7 @@ import yaml
 
 from common.evals import EvalRow, print_summary, save_summary, summarize, write_rows
 from common.kb_client import KnowledgeClient
-from common.llm import HAIKU, LLM, SONNET, model_label
+from common.llm import HAIKU, LLM, SONNET, LLMError, model_label
 from task3_meeting_to_scope import transcript as tx
 from task3_meeting_to_scope.orchestrator import Models, ScopePipeline
 from task3_meeting_to_scope.store import NotApproved, ScopeStore
@@ -102,38 +102,68 @@ def approval_rows(model: str, store: ScopeStore, draft_id: int, project: str) ->
     return rows
 
 
+def failed_rows(model_key: str, meeting: str, exc: Exception) -> list[EvalRow]:
+    """A pipeline failure is recorded as failed cases (never dropped), so partial runs stay honest."""
+    if meeting == "meeting_c":
+        names = ["removed_instagram", "languages_filter", "gender_dropped", "booking_out_of_scope", "blog_flagged",
+                 "deadline_change", "kept_unchanged_items"]
+        group = "change_detection"
+    else:
+        names = [g["id"] for g in GOLD[meeting]["requirements"]] + ["deadline", "exclusion", "feasibility_grounded"]
+        group = "requirement_recall"
+    reason = f"pipeline error: {type(exc).__name__}: {str(exc)[:150]}"
+    return [EvalRow("scope", f"{meeting}:{n}", model_key, "pipeline run", "ERROR", 0.0, 0, 0.0, False, reason, group)
+            for n in names]
+
+
 def run_model(model_key: str, kb: KnowledgeClient) -> list[EvalRow]:
     model = MODELS[model_key]
-    store = ScopeStore(Path(tempfile.mkdtemp()) / "scope_eval.db")
+    db = Path(__file__).resolve().parents[2] / "data" / "task3" / "eval_runs" / f"{model_key}_{int(time.time())}.db"
+    store = ScopeStore(db)
+    print(f"{model_key}: versions are kept in {db} for inspection")
     p = ScopePipeline(store, LLM(), kb, models=Models(model, model, model, model, model))
     rows: list[EvalRow] = []
-
-    start = time.perf_counter()
-    va = p.run_initial("fitfinder", "FitFinder", [tx.load("meeting_a")])
-    a = store.version(va)["payload"]
-    rows += requirement_rows(model_key, "meeting_a", a, a["stats"]["cost_usd"], int((time.perf_counter() - start) * 1000))
-    rows += approval_rows(model_key, store, va, "fitfinder")
-
-    start = time.perf_counter()
-    vb = p.run_initial("homefix", "HomeFix Pros", [tx.load("meeting_b")])
-    b = store.version(vb)["payload"]
-    rows += requirement_rows(model_key, "meeting_b", b, b["stats"]["cost_usd"], int((time.perf_counter() - start) * 1000))
+    va = None
+    try:
+        start = time.perf_counter()
+        va = p.run_initial("fitfinder", "FitFinder", [tx.load("meeting_a")])
+        a = store.version(va)["payload"]
+        rows += requirement_rows(model_key, "meeting_a", a, a["stats"]["cost_usd"],
+                                 int((time.perf_counter() - start) * 1000))
+        rows += approval_rows(model_key, store, va, "fitfinder")
+        print(f"  meeting A done: {a['stats']['seconds']}")
+    except LLMError as exc:
+        rows += failed_rows(model_key, "meeting_a", exc)
 
     try:
-        p.run_followup("homefix", "HomeFix Pros", tx.load("meeting_c"))
-        ok = False
-    except ValueError:
-        ok = True
-    rows.append(EvalRow("scope", "homefix:followup_needs_baseline", model_key, "refused", "refused" if ok else "ran",
-                        float(ok), 0, 0.0, ok, "" if ok else "compared against an unapproved draft", "approval"))
+        start = time.perf_counter()
+        vb = p.run_initial("homefix", "HomeFix Pros", [tx.load("meeting_b")])
+        b = store.version(vb)["payload"]
+        rows += requirement_rows(model_key, "meeting_b", b, b["stats"]["cost_usd"],
+                                 int((time.perf_counter() - start) * 1000))
+        print(f"  meeting B done: {b['stats']['seconds']}")
+        try:
+            p.run_followup("homefix", "HomeFix Pros", tx.load("meeting_c"))
+            ok = False
+        except ValueError:
+            ok = True
+        rows.append(EvalRow("scope", "homefix:followup_needs_baseline", model_key, "refused", "refused" if ok else "ran",
+                            float(ok), 0, 0.0, ok, "" if ok else "compared against an unapproved draft", "approval"))
+    except LLMError as exc:
+        rows += failed_rows(model_key, "meeting_b", exc)
 
-    store.approve(va, "eval-senior", note="evaluation run")
-    start = time.perf_counter()
-    vc = p.run_followup("fitfinder", "FitFinder", tx.load("meeting_c"))
-    c = store.version(vc)["payload"]
-    rows += change_rows(model_key, c, c["stats"]["cost_usd"], int((time.perf_counter() - start) * 1000))
-    print(f"{model_key}: A ${a['stats']['cost_usd']:.4f} {a['stats']['seconds']}, "
-          f"B ${b['stats']['cost_usd']:.4f}, C ${c['stats']['cost_usd']:.4f}")
+    if va is None:
+        rows += failed_rows(model_key, "meeting_c", RuntimeError("meeting A baseline missing"))
+        return rows
+    try:
+        store.approve(va, "eval-senior", note="evaluation run")
+        start = time.perf_counter()
+        vc = p.run_followup("fitfinder", "FitFinder", tx.load("meeting_c"))
+        c = store.version(vc)["payload"]
+        rows += change_rows(model_key, c, c["stats"]["cost_usd"], int((time.perf_counter() - start) * 1000))
+        print(f"  meeting C done: {c['stats']['seconds']}")
+    except LLMError as exc:
+        rows += failed_rows(model_key, "meeting_c", exc)
     return rows
 
 

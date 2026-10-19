@@ -1,0 +1,33 @@
+{
+  "groq:openai/gpt-oss-120b": {
+    "cases": 35,
+    "pass_rate": 0.457,
+    "mean_quality": 0.457,
+    "p50_latency_ms": 0,
+    "p95_latency_ms": 19656,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "approval": {
+        "cases": 1,
+        "pass_rate": 1.0
+      },
+      "change_detection": {
+        "cases": 7,
+        "pass_rate": 0.0
+      },
+      "constraints": {
+        "cases": 2,
+        "pass_rate": 1.0
+      },
+      "feasibility": {
+        "cases": 1,
+        "pass_rate": 1.0
+      },
+      "requirement_recall": {
+        "cases": 24,
+        "pass_rate": 0.5
+      }
+    }
+  }
+}

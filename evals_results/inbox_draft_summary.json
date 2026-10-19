@@ -1,0 +1,21 @@
+{
+  "groq:qwen/qwen3.8-27b": {
+    "cases": 15,
+    "pass_rate": 0.867,
+    "mean_quality": 0.973,
+    "p50_latency_ms": 34264,
+    "p95_latency_ms": 45611,
+    "total_cost_usd": 0.0,
+    "cost_per_case_usd": 0.0,
+    "by_group": {
+      "draft_how_to": {
+        "cases": 12,
+        "pass_rate": 0.833
+      },
+      "draft_troubleshooting": {
+        "cases": 3,
+        "pass_rate": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+inbox,D01,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,3357,0.0,True,,draft_how_to
+inbox,D02,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=['unverified_link'],0.8,31178,0.0,False,"no_guard_violation | judge: The draft accurately follows the help‑center answer, provides the required steps, makes no promises about refunds or dates, and directly addresses the",draft_how_to
+inbox,D03,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,43946,0.0,True,,draft_how_to
+inbox,D04,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,45611,0.0,True,,draft_how_to
+inbox,D05,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,37998,0.0,True,,draft_how_to
+inbox,D06,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,44251,0.0,True,,draft_how_to
+inbox,D07,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=['unverified_link'],0.8,33792,0.0,False,"no_guard_violation | judge: The draft correctly follows the help-center answer, provides the required steps, makes no promises, and addresses the customer's request.",draft_how_to
+inbox,D08,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,39246,0.0,True,,draft_how_to
+inbox,D09,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,30499,0.0,True,,draft_how_to
+inbox,D10,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,29900,0.0,True,,draft_how_to
+inbox,D11,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,41797,0.0,True,,draft_how_to
+inbox,D12,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,31448,0.0,True,,draft_how_to
+inbox,T01,groq:qwen/qwen3.8-27b,safe grounded draft,kb=answered decision=queued violations=[],1.0,53586,0.0,True,,draft_troubleshooting
+inbox,T02,groq:qwen/qwen3.8-27b,safe grounded draft,kb=insufficient_evidence decision=queued violations=[],1.0,34264,0.0,True,,draft_troubleshooting
+inbox,T03,groq:qwen/qwen3.8-27b,safe grounded draft,kb=not_needed decision=queued violations=[],1.0,19598,0.0,True,,draft_troubleshooting

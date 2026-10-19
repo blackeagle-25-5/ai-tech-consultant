@@ -9,6 +9,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from task1_knowledge_brain.app import escalations
@@ -56,6 +57,14 @@ app = FastAPI(
     version="1.0.0",
     description="Grounded answers with citations over the Brilliant Directories help center. See API.md.",
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

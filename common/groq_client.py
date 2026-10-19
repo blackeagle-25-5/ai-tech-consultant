@@ -127,7 +127,7 @@ class GroqAnthropicAdapter:
             chat.append({"role": m["role"],
                          "content": _convert_content(content) if isinstance(content, list) else content})
         payload: dict[str, Any] = {
-            "model": model, "messages": chat, "max_completion_tokens": max_tokens, "temperature": 0.2,
+            "model": model, "messages": chat, "max_completion_tokens": min(max_tokens, 3500), "temperature": 0.2,
             "response_format": {"type": "json_schema",
                                 "json_schema": {"name": output_format.__name__, "strict": True,
                                                 "schema": strict_schema(schema)}},

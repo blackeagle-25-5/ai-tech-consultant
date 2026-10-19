@@ -1,0 +1,16 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+inbox,D01,groq:openai/gpt-oss-20b,safe grounded draft,kb_unavailable,0.0,4394,0.0,False,Knowledge service unavailable: no draft written to avoid inventing facts.,draft
+inbox,D02,groq:openai/gpt-oss-20b,safe grounded draft,kb_unavailable,0.0,2937,0.0,False,Knowledge service unavailable: no draft written to avoid inventing facts.,draft
+inbox,D03,groq:openai/gpt-oss-20b,safe grounded draft,kb_unavailable,0.0,2667,0.0,False,Knowledge service unavailable: no draft written to avoid inventing facts.,draft
+inbox,D04,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,86,0.0,False,"GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b (HTTP 429, retry-after 317s). Free-tier token budget; try again later.",draft
+inbox,D05,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,9,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D06,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,7,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D07,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,8,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D08,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,10,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D09,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,11,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D10,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,8,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D11,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,7,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,D12,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,8,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,T01,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,7,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,T02,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,8,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft
+inbox,T03,groq:openai/gpt-oss-20b,safe grounded draft,error,0.0,7,0.0,False,GroqQuotaExhausted: Groq quota exhausted for openai/gpt-oss-20b; retry after 317s (no request sent).,draft

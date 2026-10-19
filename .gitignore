@@ -4,5 +4,8 @@ __pycache__/
 .env
 *.db
 *.db-*
-/data/
+data/models/
+data/task2/
+data/task3/
+data/llm_ledger.jsonl
 docs/assignment/

@@ -1,0 +1,4 @@
+task,case_id,model,expected,actual,quality,latency_ms,cost,passed,failure_reason,group
+inbox,D01,groq:openai/gpt-oss-20b,"kb_unavailable, no invented draft",kb_unavailable draft_len=0,1.0,0,0.0,True,,kb_down
+inbox,D02,groq:openai/gpt-oss-20b,"kb_unavailable, no invented draft",kb_unavailable draft_len=0,1.0,0,0.0,True,,kb_down
+inbox,D03,groq:openai/gpt-oss-20b,"kb_unavailable, no invented draft",kb_unavailable draft_len=0,1.0,0,0.0,True,,kb_down

@@ -6,8 +6,10 @@ descriptions, searchable chunks (vector + full-text), escalations and run report
 
 from __future__ import annotations
 
-import sqlite3
+import gzip
 from pathlib import Path
+import shutil
+import sqlite3
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS pages (
@@ -115,6 +117,18 @@ CREATE TABLE IF NOT EXISTS ingestion_runs (
 def connect(db_path: Path) -> sqlite3.Connection:
     db_path = Path(db_path)
     db_path.parent.mkdir(parents=True, exist_ok=True)
+    if not db_path.exists():
+        gz_candidate = db_path.with_name(db_path.name + ".gz")
+        if gz_candidate.exists():
+            temp_target = db_path.with_suffix(".tmp")
+            try:
+                with gzip.open(gz_candidate, "rb") as f_in, open(temp_target, "wb") as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+                temp_target.replace(db_path)
+            except Exception:
+                if temp_target.exists():
+                    temp_target.unlink()
+                raise
     conn = sqlite3.connect(db_path, timeout=30, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
