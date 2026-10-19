@@ -36,7 +36,7 @@ class FastEmbedder:
         from fastembed import TextEmbedding
 
         cache_dir = Path(os.getenv("FASTEMBED_CACHE", Path(__file__).resolve().parents[2] / "data" / "models"))
-        self.model = TextEmbedding(model_name=model_name, cache_dir=str(cache_dir))
+        self.model = TextEmbedding(model_name=model_name, cache_dir=str(cache_dir), threads=1, lazy_load=True)
 
     def embed_documents(self, texts: list[str]) -> np.ndarray:
         return _normalize(np.array(list(self.model.embed(texts, batch_size=64)), dtype=np.float32))
